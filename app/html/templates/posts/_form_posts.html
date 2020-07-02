@@ -1,0 +1,9 @@
+{% from "_form_field.html" import form_field %}
+{{form_field(form.title, class="form-control")}}
+<div class="form-group">
+	{{ form.pagedown(only_input=True, class='form-control h text-font-size') }}
+	<div class="border p-3 mt-3">
+		{{ form.pagedown(only_preview=True, class='form-control text-font-size') }}
+	</div>
+</div>
+{{ form_field(form.upload, class="form-control-sm") }}

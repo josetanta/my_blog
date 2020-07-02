@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<h2 class="text-info"> Ups! Aun no se ha auntenticado {{ current_user.username }} !</h2>
+<p>Por favor revise su Correo Electronico para que pueda confirmar su Cuenta!</p>
+<p>Sí necesita, un nuevo mensaje de confirmación <a href="{{ url_for('users.resend_cofirmation') }}">Click Aquí!</a></p>
+{% endblock %}

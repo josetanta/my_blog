@@ -1,0 +1,9 @@
+<div class="form-group">
+    {{ form.content.label(class="form-control-label") }}
+    {% for error in form.content.errors %}
+    <div class="text-danger">
+        {{ error }}
+    </div>
+    {% endfor %}
+    {{ form.content(class="form-control") }}
+</div>

@@ -1,0 +1,7 @@
+{% from "_form_field.html" import form_field %}
+<div class="form-group">
+	{{form_field(c_form.body, class="form-control")}}
+</div>
+<div class="modal-footer">
+	{{ c_form.submit(class="btn btn-outline-success") }}
+</div>

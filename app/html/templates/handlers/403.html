@@ -1,0 +1,6 @@
+{% extends 'index.html' %}
+
+{% block contenido %}
+<h2>Ups! Usted no tiene permiso para realizar esta acción.</h2>
+<p>Puedes regresar a la página anterior <a href="{{ url_for('main.home') }}">Regresar a la Página principal</a> </p>
+{% endblock contenido %}

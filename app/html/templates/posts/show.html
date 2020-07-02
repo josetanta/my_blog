@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% from "_form_field.html" import form_field %}
+
+{% block contenido %}
+<div class="row">
+  <div class="col-md-8">
+    <fieldset class="post-show">
+      <legend>
+        <h3 class="text-primary">{{post.title}}</h3>
+      </legend>
+      {% if post.upload %}
+        <img class="post-img" src="{{ post.upload_path }}" alt="Imagen del Post">
+      {% else %}
+      {% endif %}
+        <div class="post-content">
+          <p class="text-break">{{ post.content_html | safe }}</p>
+        </div>
+      {% if post.author.upload %}
+        <img class="image-account-post" src="{{ post.author.upload_path }}" alt="Foto de mi perfil">
+      {% endif %}
+      <a class="post-author-username text-info">{{ post.author.username}}</a>
+      <p class="text-muted">{{post.date_register.strftime('%d ,%B %Y')}}</p>
+      {% if current_user == post.author %}
+        <button type="button" class="btn btn-outline-success mx-2 my-2" data-toggle="modal" data-target="#updatePost" data-whatever="@getbootstrap">Actualizar mi Post</button>
+        <button type="button" class="btn btn-danger mx-2 my-2" data-toggle="modal" data-target="#postdelete">Eliminar</button>
+      {% endif %}
+    </fieldset>
+  </div>
+  <div class="col-md-4">
+    {% if current_user.is_authenticated and current_user.can(Permission.COMMENT) %}
+        <button class="btn-sm btn btn-info" data-toggle="collapse" data-target="#collapseComment">Comentar este Post</button>
+        <div class="collapse" id="collapseComment">
+          <form class="my-1" action="{{ url_for('posts.comment', slug = post.slug)}}" method="POST">
+            {{ c_form.hidden_tag() }}
+            {% include "posts/_form_comment.html" %}
+          </form>
+        </div>
+    {% endif %}
+    <h4 class="mt-3 text-info">Comentarios</h4>
+    {% for comment in post.comments %}
+      <div class="my-3 media">
+        <img src="{{ comment.author.upload_path }}" class="mr-3 comment-img-author" alt="...">
+        <div class="media-body text-break">
+          <b class="mt-0">{{ comment.author.username }}</b><br>
+          {{ comment.body }}
+        </div>
+      </div>
+    {% else %}
+      <p>Por el momento su post no tiene comentarios.</p>
+    {% endfor %}
+  </div>
+</div>
+
+{% if current_user == post.author %}
+  <!-- Modal -->
+  <div class="modal fade" id="postdelete" tabindex="-1" role="dialog" aria-labelledby="postdeleteLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="postdeleteLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Esta seguro de eliminar este Post
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <form action="{{ url_for('posts.post_delete',slug = post.slug) }}" method="post">
+            {{ form.hidden_tag() }}
+            <input type="submit" class="btn btn-danger" value="Si, Eliminar">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actualizar Post -->
+  <div class="modal fade bd-example-modal-lg" id="updatePost" tabindex="-1" role="dialog" aria-labelledby="updatePostLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Actualiza tu Post</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="{{ url_for('posts.post', slug = post.slug) }}"  enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            {% include 'posts/_form_posts.html' %}
+            <div class="modal-footer">
+              {{ form.submit(class="btn btn-outline-success", value = "Actualizar") }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{{ pagedown.include_pagedown() }}
+{% endblock contenido %}

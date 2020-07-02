@@ -1,0 +1,17 @@
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<link rel="icon" href="{{ url_for('static', filename='ico/flask.png') }}" type="image/png">
+<!-- Scripts -->
+<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popper.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+<script src="{{ url_for('static', filename='js/app/follow.js') }}"></script>
+{% block scripts %}{% endblock %}
+
+<!-- StylesSheet -->
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}" type="text/css">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/perfil.css') }}" type="text/css">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/post.css') }}" type="text/css">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/main.css') }}" type="text/css">
+<title>{%if title %}{{ APP_NAME }} | {{ title }}{% else %}{{ APP_NAME }}{%endif%}</title>

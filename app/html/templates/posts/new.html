@@ -1,0 +1,19 @@
+{% extends 'index.html' %}
+{% block contenido %}
+{% if current_user.is_authenticated and current_user.can(Permission.WRITE_POST) %}
+<div class="row">
+	<div class="col-md-8 my-auto">
+		<div class="modal-body">
+			<form method="post" enctype="multipart/form-data">
+				{{ form.hidden_tag() }}
+				{% include 'posts/_form_posts.html' %}
+				<div class="modal-footer">
+					{{ form.submit(class="btn btn-outline-success") }}
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endif %}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
