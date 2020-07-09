@@ -18,7 +18,3 @@ __pycache__
 # Databases in sqlite3
 site-dev.sqlite3
 site-test.sqlite3
-
-# Text
-**/*.txt
-.txt
