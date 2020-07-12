@@ -298,7 +298,6 @@ class Post(UserMixin, db.Model):
         })
         return obj
 
-
 db.event.listen(Post.content, 'set', Post.on_change_body)
 
 

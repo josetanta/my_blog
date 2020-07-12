@@ -7,6 +7,10 @@
     <fieldset class="post-show">
       <legend>
         <h3 class="text-primary">{{post.title}}</h3>
+        {% if current_user == post.author %}
+          <button type="button" class="btn-sm btn btn-outline-success" data-toggle="modal" data-target="#updatePost" data-whatever="@getbootstrap">Actualizar mi Post</button>
+          <button type="button" class="btn-sm btn btn-danger" data-toggle="modal" data-target="#postdelete">Eliminar</button>
+        {% endif %}
       </legend>
       {% if post.upload %}
         <img class="post-img" src="{{ post.upload_path }}" alt="Imagen del Post">
@@ -20,10 +24,6 @@
       {% endif %}
       <a class="post-author-username text-info">{{ post.author.username}}</a>
       <p class="text-muted">{{post.date_register.strftime('%d ,%B %Y')}}</p>
-      {% if current_user == post.author %}
-        <button type="button" class="btn btn-outline-success mx-2 my-2" data-toggle="modal" data-target="#updatePost" data-whatever="@getbootstrap">Actualizar mi Post</button>
-        <button type="button" class="btn btn-danger mx-2 my-2" data-toggle="modal" data-target="#postdelete">Eliminar</button>
-      {% endif %}
     </fieldset>
   </div>
   <div class="col-md-4">
@@ -58,13 +58,10 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="postdeleteLabel">Modal title</h5>
+          <h4>Estas Seguro de quere eliminar tu Post - <span class="text-info">{{ post.title }}</span></h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-        </div>
-        <div class="modal-body">
-          Esta seguro de eliminar este Post
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

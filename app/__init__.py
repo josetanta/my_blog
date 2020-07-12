@@ -14,34 +14,35 @@ login_manager.login_view = 'users.login'
 pagedown = PageDown()
 migrate = Migrate()
 
+
 def create_app(config_name):
-	app = Flask(__name__ ,
-		instance_relative_config=True,
-		template_folder=os.path.join(BASE_DIR,'html/templates'),
-		static_folder=os.path.join(BASE_DIR,'html/static')
-	)
-	app.config.from_object(config.get(config_name))
-	config[config_name].init_app(app)
+    app = Flask(__name__,
+                instance_relative_config=True,
+                template_folder=os.path.join(BASE_DIR, 'html/templates'),
+                static_folder=os.path.join(BASE_DIR, 'html/static')
+                )
+    app.config.from_object(config.get(config_name))
+    config[config_name].init_app(app)
 
-	csrf.init_app(app)
-	login_manager.init_app(app)
-	db.init_app(app)
-	pagedown.init_app(app)
-	migrate.init_app(app, db)
+    csrf.init_app(app)
+    login_manager.init_app(app)
+    db.init_app(app)
+    pagedown.init_app(app)
+    migrate.init_app(app, db)
 
-	from app.main import main
-	app.register_blueprint(main)
+    from app.main import main
+    app.register_blueprint(main)
 
-	from app.users import users
-	app.register_blueprint(users)
+    from app.users import users
+    app.register_blueprint(users)
 
-	from app.posts import posts
-	app.register_blueprint(posts)
+    from app.posts import posts
+    app.register_blueprint(posts)
 
-	from app.admin import admin
-	app.register_blueprint(admin, url_prefix = '/admin')
+    from app.admin import admin
+    app.register_blueprint(admin, url_prefix='/admin')
 
-	from app.api.v1 import v1 as api_v_1
-	app.register_blueprint(api_v_1, url_prefix = '/api/v1')
+    from app.api.v1 import v1 as api_v_1
+    app.register_blueprint(api_v_1, url_prefix='/api/v1')
 
-	return app
+    return app

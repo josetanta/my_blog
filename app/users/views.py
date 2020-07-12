@@ -14,7 +14,7 @@ from flask import (
 from flask_login import current_user, login_user, logout_user, login_required
 from .forms import RegisterForm, LoginForm, AccountForm
 from app.decorators import permission_required
-from app.utils import save_upload_user
+from app.utils import save_upload
 from app.models import User, db, Permission
 from app.mail import send_token_confirmation
 from app.main.forms import SendEmailForm
@@ -102,19 +102,17 @@ def account(slug=None, id=None):
     if form.validate_on_submit():
 
         # Traer el path del upload del usuario logueado (o en session)
-        image_del = os.path.join(
+        image_current_del = os.path.join(
             current_app.root_path, "html\\static\\uploads\\users", current_user.upload)
 
-        # Preguntar si existe un archivo en el input(esto desde el request) y una ruta existente
-        # del upload a eliminar
         if request.files['upload']:
 
             # Eliminar el upload actual
-            if os.path.exists(image_del):
-                os.remove(image_del)
+            if os.path.exists(image_current_del):
+                os.remove(image_current_del)
 
             # Actualizar el nuevo file subido(en este caso hizo un update el cliente)
-            img = save_upload_user(form.upload.data)
+            img = save_upload(form.upload.data, 'users', 300)
 
             # Se asigna como nuevo upload al current user
             current_user.upload = img

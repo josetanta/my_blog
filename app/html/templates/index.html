@@ -6,19 +6,19 @@
 		{% if posts %}
 			{% for post in posts.items %}
 			{{ g.user }}
-			<fieldset class="shadow post-show">
+			<fieldset class="shadow post-show my-5">
 				<legend>
 					<h3><a class="text-info text-decoration-none"	href="{{ url_for('posts.post', slug = post.slug) }}">{{post.title}}</a></h3>
 				</legend>
 				<div id="post-public">
 					{% if post.upload %}
-					<img class="post-img" src="{{ post.upload_path }}" alt="Imagen del Post">
+					<img class="post-img" src="{{ post.upload_path }}" alt="Imagen del Post" style="width: 340px;">
 					{% endif %}
 					<div class="post-content">
 						{% if post.content_html %}
-							<p class="text-break">{{ post.content_html | safe }}</p>
+							<p class="text-break">{{ post.content_html | safe | truncate(150)}}</p>
 						{% else %}
-							<p class="text-break">{{ post.content }}</p>
+							<p class="text-break">{{ post.content | truncate(150)}}</p>
 						{% endif %}
 						<p class="text-muted">{{post.date_register.strftime('%d ,%B %Y')}}</p>
 					</div>

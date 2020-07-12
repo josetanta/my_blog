@@ -6,7 +6,7 @@ from flask_login import current_user, login_required
 from app.models import Post, User, Permission, Comment
 from app.decorators import permission_required
 from app import db
-from app.utils import save_upload_post
+from app.utils import save_upload
 
 
 @posts.route('/post/<slug>', methods=['GET', 'POST', 'PUT'])
@@ -18,19 +18,17 @@ def post(slug):
         if form.validate_on_submit():
 
             # Traer el path del upload Post
-            image_del = os.path.join(
+            image_current_del = os.path.join(
                 current_app.root_path, "html\\static\\uploads\\posts", post.upload)
 
-            # Pregunstar si existe un archivo en el input(esto desde el request) y una ruta existente
-            # del upload a eliminar
             if request.files['upload']:
 
-                if os.path.exists(image_del):
+                if os.path.exists(image_current_del):
                     # Eliminar el upload actual
-                    os.remove(image_del)
+                    os.remove(image_current_del)
 
                 # Actualizar el nuevo file subido.
-                img = save_upload_post(form.upload.data)
+                img = save_upload(form.upload.data, 'posts', 700)
 
                 # Se asigna como nuevo upload al post
                 post.upload = img
@@ -78,7 +76,7 @@ def new():
         # Pregunstar si existe un archivo en el input(esto desde el request)
         if request.files['upload']:
             # Crear un nuevo upload para el post
-            img = save_upload_post(form.upload.data)
+            img = save_upload(form.upload.data)
 
             # Se asigna como nuevo upload al post
             new_post.upload = img

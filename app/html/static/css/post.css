@@ -1,11 +1,11 @@
 .post-show{
-	display: flex;
+	display: block;
 	padding: 0 3rem;
 	padding-bottom: 2rem;
 }
 
 .post-img {
-   width: 240px !important;
+   width: auto;
    line-height: 0;
    border-style: hidden;
    display: block;
@@ -18,12 +18,12 @@
 
 .post-content {
    display: inline;
+   justify-content: space-between;
 }
 
 .image-account-post {
    width: 35px;
    height: 35px;
-   /*margin-bottom: 1em;*/
    border-radius: 100%;
    display: inline-table;
 }
@@ -52,9 +52,16 @@
 	color: #20c991;
 }
 
-.followoers {
+.followers {
 	display: block;
 	width: 7rem;
+    color: rgba(200,143,200,.9);
+}
+
+.followeds {
+    display: block;
+    width: 7rem;
+    color: rgba(100,143,100,.9);
 }
 
 .post-ban {

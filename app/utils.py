@@ -1,34 +1,18 @@
 import os
 import secrets
 from PIL import Image
-from flask import current_app, url_for
+from flask import current_app
 
 
-def save_upload_post(img):
+def save_upload(img, model='', size=200):
     name_token_img = secrets.token_hex(12)
 
     _, b_img = os.path.splitext(img.filename)
     t_img = name_token_img + b_img
 
-    image_path = os.path.join(current_app.root_path,
-                              'html/static/uploads/posts', t_img)
+    image_path = os.path.join(current_app.root_path, f'html/static/uploads/{model}', t_img)
     save_img = Image.open(img)
-    save_img.thumbnail((550, 550))
-    save_img.save(image_path)
-
-    return t_img
-
-
-def save_upload_user(img):
-    name_token_img = secrets.token_hex(12)
-
-    _, b_img = os.path.splitext(img.filename)
-    t_img = name_token_img + b_img
-
-    image_path = os.path.join(current_app.root_path,
-                              'html/static/uploads/users', t_img)
-    save_img = Image.open(img)
-    save_img.thumbnail((300, 300))
+    save_img.thumbnail((size, size))
     save_img.save(image_path)
 
     return t_img
