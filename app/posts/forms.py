@@ -12,7 +12,7 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 
 class PostCreateForm(FlaskForm):
-    title = StringField('Titulo', validators=[DataRequired(), Length(6, 40)])
+    title = StringField('Titulo', validators=[DataRequired(), Length(6, 120)])
     pagedown = PageDownField('Contenido', validators=[DataRequired()])
     upload = FileField('Imagen del Post', validators=[
                        FileAllowed(ALLOWED_EXTENSIONS)])
