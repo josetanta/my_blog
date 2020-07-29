@@ -19,7 +19,6 @@ from .forms import SendEmailForm
 from app.models import User
 from app.mail import send_email_admin
 
-
 @main.after_app_request
 def after_request(response):
     for query in get_debug_queries():

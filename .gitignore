@@ -7,14 +7,5 @@ __pycache__
 /**/__pycache__
 .pytest_cache/
 
-# Format Img
-**/**/*.jpg
-**/**/*.csv
-**/**/*.png
-
 # Enviroments
 .env
-
-# Databases in sqlite3
-**/**/site-dev.sqlite3
-**/**/site-test.sqlite3

@@ -28,7 +28,7 @@ Hola {user.username}.
 Bienvenido al Blog (Comunidad)
 Por favor dirigete a esta dirección de URL, para confirmar tu cuenta: {url_for('users.confirm', token = token, _external = True)}
 Nota: No compartas con nadie este mensaje.
-Atte: <{current_app.config['EMAIL_BLOG_ADMIN']}>
+Atte: <Staff-Blog>
 '''
     send = requests.post(
         current_app.config['API_URL'],

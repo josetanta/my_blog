@@ -26,7 +26,7 @@ def before_request():
     if current_user.is_authenticated:
         if not current_user.confirmed \
                 and request.endpoint \
-                and request.blueprint != 'users'\
+                and request.blueprint != 'users' \
                 and request.endpoint != 'static':
             return redirect(url_for('users.uncorfirmed'))
 
@@ -40,7 +40,6 @@ def uncorfirmed():
 
 @users.route('/register', methods=['GET', 'POST'])
 def register():
-
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
 

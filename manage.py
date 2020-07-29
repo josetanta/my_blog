@@ -27,6 +27,12 @@ def test():
     tests = unittest.TestLoader().discover('test')
     unittest.TextTestRunner(verbosity=2).run(tests)
 
+@app.cli.command("test")
+def test_flask():
+    import unittest
+    tests = unittest.TestLoader().discover('test')
+    unittest.TextTestRunner(verbosity=2).run(tests)
+
 
 @manager.command
 def seed():
@@ -35,7 +41,6 @@ def seed():
 	Ejecuta el seed.py, creación de factories
 	"""
     create_users()
-
 
 @manager.command
 def deploy():

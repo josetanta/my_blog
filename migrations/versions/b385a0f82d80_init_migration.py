@@ -1,8 +1,8 @@
-"""Init migratio Flask App
+"""Init migration
 
-Revision ID: 04140f471012
+Revision ID: b385a0f82d80
 Revises: 
-Create Date: 2020-06-27 22:24:35.186281
+Create Date: 2020-07-23 10:53:56.698506
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '04140f471012'
+revision = 'b385a0f82d80'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -59,7 +59,7 @@ def upgrade():
     )
     op.create_table('posts',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('title', sa.String(length=40), nullable=False),
+    sa.Column('title', sa.String(length=120), nullable=False),
     sa.Column('content', sa.Text(), nullable=False),
     sa.Column('content_html', sa.Text(), nullable=False),
     sa.Column('slug', sa.String(length=100), nullable=False),

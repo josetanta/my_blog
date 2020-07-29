@@ -102,3 +102,14 @@ def comment(slug):
         db.session.commit()
         flash('Se publico su comentario.', 'success')
         return redirect(url_for('.post', slug=post.slug))
+
+
+@posts.route('/posts/<slug>/comments/<id>', methods=['DELETE','POST'])
+@login_required
+def comment_delete(slug=None, id=None):
+    post = Post.query.filter_by(slug=slug).first()
+    comment = Comment.query.filter_by(post=post).first()
+
+    db.session.delete(comment)
+    db.session.commit()
+    return redirect(url_for('.post', slug=post.slug))

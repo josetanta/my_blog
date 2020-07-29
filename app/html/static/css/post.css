@@ -11,6 +11,33 @@
    display: block;
 }
 
+@media (max-width: 700px) {
+  .post-img {
+		width: 70%;
+		line-height: 0;
+		border-style: hidden;
+		display: block;
+  }
+}
+
+@media (max-width: 600px) {
+  .post-img {
+		width: 40%;
+		line-height: 0;
+		border-style: hidden;
+		display: block;
+  }
+}
+
+@media (max-width: 400px) {
+  .post-img {
+		width: 30%;
+		line-height: 0;
+		border-style: hidden;
+		display: block;
+  }
+}
+
 #post-public {
    margin: 10px;
    padding: 10px;
@@ -88,4 +115,29 @@
 .comment-img-author {
 	width: 40px;
 	height: 40px;
+}
+
+.vl {
+  border-left: 1px solid #C0AFCE;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+
+@media (max-width: 600px) {
+  #comments {
+		display: table;
+  }
+}
+
+@media (max-width: 700px) {
+  #comments {
+		display: table;
+  }
+}
+
+@media (max-width: 800px) {
+  #comments {
+		display: table;
+  }
 }

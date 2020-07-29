@@ -3,6 +3,7 @@ from flask_login import current_user
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, SubmitField, BooleanField, PasswordField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError, Email
+from wtforms.fields.html5 import EmailField
 from app.models import User
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -31,8 +32,8 @@ class RegisterForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(
-        "Por favor vuelva a ingresar su email.")])
+    email = EmailField('Email', validators=[DataRequired(
+        "Por favor vuelva a ingresar su email."), Email('Por favor Ingrese un email Correcto.')])
     password = PasswordField('Contraseña', validators=[DataRequired(
         "Por favor intente inrgesar una contraseña correcta.")])
     remember = BooleanField('Recordarme', default=False)

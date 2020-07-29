@@ -10,20 +10,23 @@ def permission_required(permission):
     Decorador para funciones de ejecución de permisos de pendiendo
     de los roles de cada usuario, para gestionar cada Post Publicado
     """
+
     def _decorator(f):
         @wraps(f)
         def func_decorator(*args, **kwargs):
             if not current_user.can(permission):
                 abort(403)
             return f(*args, **kwargs)
+
         return func_decorator
+
     return _decorator
 
 
 def admin_required(f):
-    '''
+    """
     Permisos requeridos para acciones de rol de Administrador
-    '''
+    """
     return permission_required(Permission.ADMINISTER)(f)
 
 

@@ -249,7 +249,8 @@ class Post(UserMixin, db.Model):
     status = db.Column(db.Boolean, default=True, index=True)
     upload = db.Column(db.String(200), nullable=True, default='default.jpg')
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
-    comments = db.relationship('Comment', backref='post', lazy=True)
+    comments = db.relationship(
+        'Comment', backref='post', lazy=True, cascade="all, delete-orphan")
 
     def __setattr__(self, key, value):
         super(Post, self).__setattr__(key, value)
@@ -298,6 +299,7 @@ class Post(UserMixin, db.Model):
         })
         return obj
 
+
 db.event.listen(Post.content, 'set', Post.on_change_body)
 
 
@@ -307,7 +309,7 @@ class Comment(db.Model):
     body = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), index=True)
-    publishied = db.Column(db.Boolean, default=False)
+    publishied = db.Column(db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, default=datetime.now)
 
     def to_json(self):

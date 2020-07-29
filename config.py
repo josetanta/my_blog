@@ -1,7 +1,7 @@
+import os
 from dotenv import load_dotenv
 load_dotenv(verbose=True)
 
-import os
 
 BASE_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'app')
 
@@ -66,7 +66,7 @@ config = {
     'development': Development,
     'production': Production,
     'test': Test,
-    'heroku'		: HerokuConfig,
+    'heroku': HerokuConfig,
 
     'default': Development,
 }
