@@ -8,7 +8,6 @@ from app.models import Post
 
 
 class PostAPI(MethodView):
-
     decorators = [permission_api]
 
     def get(self, post_id):
@@ -41,7 +40,6 @@ class PostAPI(MethodView):
         db.session.commit()
 
         return jsonify(post.to_json())
-
 
 post_view = PostAPI.as_view('post_api')
 v1.add_url_rule(

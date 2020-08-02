@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
-load_dotenv(verbose=True)
 
+load_dotenv(verbose=True)
 
 BASE_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'app')
 

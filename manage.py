@@ -1,12 +1,12 @@
+from app.models import User, Post, Role, Follow, Comment
+from flask_migrate import MigrateCommand, upgrade
+from flask_script import Manager, Shell
+from app import create_app, db, migrate
+from flask import current_app
+import os
 from dotenv import load_dotenv
 load_dotenv(verbose=True)
 
-import os
-from flask import current_app
-from app import create_app, db, migrate
-from flask_script import Manager, Shell
-from flask_migrate import MigrateCommand, upgrade
-from app.models import User, Post, Role, Follow, Comment
 
 app = create_app(os.getenv('FLASK_ENV'))
 print(os.getenv('FLASK_ENV'))
@@ -27,6 +27,7 @@ def test():
     tests = unittest.TestLoader().discover('test')
     unittest.TextTestRunner(verbosity=2).run(tests)
 
+
 @app.cli.command("test")
 def test_flask():
     import unittest
@@ -41,6 +42,7 @@ def seed():
 	Ejecuta el seed.py, creación de factories
 	"""
     create_users()
+
 
 @manager.command
 def deploy():

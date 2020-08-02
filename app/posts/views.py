@@ -104,7 +104,7 @@ def comment(slug):
         return redirect(url_for('.post', slug=post.slug))
 
 
-@posts.route('/posts/<slug>/comments/<id>', methods=['DELETE','POST'])
+@posts.route('/posts/<slug>/comments/<id>', methods=['DELETE', 'POST'])
 @login_required
 def comment_delete(slug=None, id=None):
     post = Post.query.filter_by(slug=slug).first()

@@ -32,9 +32,9 @@ Atte: <Staff-Blog>
 '''
     send = requests.post(
         current_app.config['API_URL'],
-        auth=("api", current_app.config['API_KEY']),
+        auth=("api", current_app.config.get('API_KEY')),
         data={
-            "from": f"BlogJGTC <{current_app.config['EMAIL_BLOG_ADMIN']}>",
+            "from": f"BlogJGTC <{current_app.config.get('EMAIL_BLOG_ADMIN')}>",
             "to": [f"{user.username}", f"{user.email}"],
             "subject": "Confirmación de Cuenta de Blog",
             "text": msg,

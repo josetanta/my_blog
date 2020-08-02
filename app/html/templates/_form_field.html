@@ -1,15 +1,15 @@
 {% macro form_field(field) %}
 <div class="form-group">
-    {{ field.label(class='form-label') }}
-    {% if field.errors %}
-    {{ field(class = 'form-control is-invalid') }}
-    <div class="invalid-feedback">
-        {% for error in field.errors %}
-        <span class="text-danger">{{ error }}</span>
-        {% endfor %}
-    </div>
-    {% else %}
-    {{ field(**kwargs) }}
-    {% endif %}
+  {{ field.label(class='form-label') }}
+  {% if field.errors %}
+  {{ field(class = 'form-control is-invalid') }}
+  <div class="invalid-feedback">
+    {% for error in field.errors %}
+    <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+  </div>
+  {% else %}
+  {{ field(**kwargs) }}
+  {% endif %}
 </div>
 {% endmacro %}

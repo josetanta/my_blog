@@ -54,7 +54,7 @@ def register():
         flash(f'Te hemos enviado un mensaje de confirmación de cuenta a tu correo.', 'info')
         return redirect(url_for('main.home'))
 
-    return render_template('users/register.html', form=form, title='Registrarse')
+    return render_template('users/register.jinja', form=form, title='Registrarse')
 
 
 @users.route('/login', methods=['GET', 'POST'])

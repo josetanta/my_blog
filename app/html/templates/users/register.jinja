@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% from "_form_field.html" import form_field %}
+
+{% block contenido %}
+<div class="row">
+	<div class="d-table">
+		<div class="col col-md-6 col-xl-6 col-lg-6">
+			<div class="d-block register-view">
+				<img src="{{ url_for('static', filename='uploads/image.jpg') }}" class="register-img"/>
+			</div>
+		</div>
+		<div class="col col-md-6 col-xl-6 col-lg-6">
+			<div class="d-block register-view">
+				<fieldset class="form-group">
+					<legend class="border-bottom mb-4">Registrarse</legend>
+						<form method="post">
+						{{ form.hidden_tag() }}
+							{{ form_field(form.username, class="form-control") }}
+							{{ form_field(form.email, class="form-control") }}
+							{{ form_field(form.password, class="form-control") }}
+							{{ form_field(form.password_conf, class="form-control") }}
+						<div class="form-group">
+							{{ form.submit(class="btn btn-outline-primary") }}
+							<a class="ml-4 text-info" href="{{ url_for('users.login') }}">Iniciar Sesión</a>
+						</div>
+					</form>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock contenido %}

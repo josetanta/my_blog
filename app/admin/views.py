@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for
-from app.admin import admin
+from . import admin
 from flask_login import login_required
 from app.decorators import admin_required
 from app.models import Post, User, db, Role, Comment
