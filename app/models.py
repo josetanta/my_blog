@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app, jsonify, url_for
 from datetime import datetime
 from slugify import slugify
-from app import db, login_manager
+from . import db, login_manager
 
 
 class Permission:
@@ -20,7 +20,6 @@ class Permission:
 
 
 class Role(db.Model):
-
     __tablename__ = 'roles'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -75,7 +74,6 @@ class Follow(db.Model):
 
 
 class User(UserMixin, db.Model):
-
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, unique=True)
     username = db.Column(db.String(40), nullable=False,

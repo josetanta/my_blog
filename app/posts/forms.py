@@ -5,7 +5,7 @@ from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, Length, ValidationError
 from flask_pagedown.fields import PageDownField
-from app.models import Post
+from ..models import Post
 from slugify import slugify
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -15,7 +15,7 @@ class PostCreateForm(FlaskForm):
     title = StringField('Titulo', validators=[DataRequired(), Length(6, 120)])
     pagedown = PageDownField('Contenido', validators=[DataRequired()])
     upload = FileField('Imagen del Post', validators=[
-                       FileAllowed(ALLOWED_EXTENSIONS)])
+        FileAllowed(ALLOWED_EXTENSIONS)])
     submit = SubmitField('Publicar Post')
 
     def validate_title(self, title):

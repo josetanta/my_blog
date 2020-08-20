@@ -1,10 +1,12 @@
+import os
+from config import config, BASE_DIR
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from flask_pagedown import PageDown
-from config import os, config, BASE_DIR
+
 
 csrf = CSRFProtect()
 db = SQLAlchemy()
@@ -30,19 +32,19 @@ def create_app(config_name):
     pagedown.init_app(app)
     migrate.init_app(app, db)
 
-    from app.main import main
+    from .main import main
     app.register_blueprint(main)
 
-    from app.users import users
+    from .users import users
     app.register_blueprint(users)
 
-    from app.posts import posts
+    from .posts import posts
     app.register_blueprint(posts)
 
-    from app.admin import admin
+    from .admin import admin
     app.register_blueprint(admin, url_prefix='/admin')
 
-    from app.api.v1 import v1 as api_v_1
+    from .api.v1 import v1 as api_v_1
     app.register_blueprint(api_v_1, url_prefix='/api/v1')
 
     return app

@@ -1,12 +1,19 @@
 import os
 from . import posts
 from .forms import PostCreateForm, CommentForm
-from flask import render_template, redirect, url_for, request, flash, current_app
+from flask import (
+    render_template,
+    redirect,
+    url_for,
+    request,
+    flash,
+    current_app
+)
 from flask_login import current_user, login_required
-from app.models import Post, User, Permission, Comment
-from app.decorators import permission_required
-from app import db
-from app.utils import save_upload
+from ..models import Post, Permission, Comment
+from ..decorators import permission_required
+from .. import db
+from ..utils import save_upload
 
 
 @posts.route('/post/<slug>', methods=['GET', 'POST', 'PUT'])

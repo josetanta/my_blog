@@ -5,19 +5,16 @@ from flask import (
     redirect,
     request,
     url_for,
-    make_response,
     current_app,
-    copy_current_request_context
 )
 from flask_login import current_user, login_required
-from app.models import Post, db
-from app.posts.forms import PostCreateForm
+from ..models import Post
 from flask_sqlalchemy import get_debug_queries
 from . import main
-from flask.views import MethodView
 from .forms import SendEmailForm
-from app.models import User
-from app.mail import send_email_admin
+from ..models import User
+from ..mail import send_email_admin
+
 
 @main.after_app_request
 def after_request(response):
@@ -35,8 +32,8 @@ def home():
     # Paginación de los objectos a renderizar
     page = request.args.get('page', 1, type=int)
 
-    posts = Post.query.filter_by(status=True)\
-        .order_by(Post.date_register.desc())\
+    posts = Post.query.filter_by(status=True) \
+        .order_by(Post.date_register.desc()) \
         .paginate(page=page, per_page=4)
     return render_template('index.html', title='Home', posts=posts, form_email=form_email)
 

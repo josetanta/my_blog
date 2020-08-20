@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import abort, flash
 from flask_login import current_user
-from app.models import Permission
+from .models import Permission
 
 
 # Permsisos requeridos para acciones de los usuarios

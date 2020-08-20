@@ -1,10 +1,9 @@
-from app import db
+from ... import db
 from flask import jsonify, request
 from flask.views import MethodView
-from flask_login import login_required
-from app.decorators import permission_api
+from ...decorators import permission_api
 from . import v1
-from app.models import Post
+from ...models import Post
 
 
 class PostAPI(MethodView):
@@ -40,6 +39,7 @@ class PostAPI(MethodView):
         db.session.commit()
 
         return jsonify(post.to_json())
+
 
 post_view = PostAPI.as_view('post_api')
 v1.add_url_rule(

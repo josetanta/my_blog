@@ -1,5 +1,4 @@
-from .models import User, Post, db, Role
-from werkzeug.security import generate_password_hash
+from .models import db, Role
 
 
 def create_users():

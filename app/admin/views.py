@@ -1,8 +1,8 @@
 from flask import render_template, redirect, url_for
 from . import admin
 from flask_login import login_required
-from app.decorators import admin_required
-from app.models import Post, User, db, Role, Comment
+from ..decorators import admin_required
+from ..models import Post, User, db, Role, Comment
 
 
 @admin.route('/')
@@ -32,7 +32,8 @@ def posts():
     posts = Post.query.order_by(Post.date_register.desc())
     posts_pub = list(filter(lambda p: p.status == True, posts))
     posts_ban = list(filter(lambda p: p.status == False, posts))
-    return render_template('admin/posts.html', title='Admin | Posts', posts_pub=posts_pub, posts_ban=posts_ban, posts=posts)
+    return render_template('admin/posts.html', title='Admin | Posts', posts_pub=posts_pub, posts_ban=posts_ban,
+                           posts=posts)
 
 
 @admin.route('/comments/', methods=['GET'])
