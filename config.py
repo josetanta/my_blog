@@ -69,7 +69,7 @@ class Test(Config):
 
 config = {
     'development': Development,
-    'developmentmysql': Development,
+    'developmentmysql': DevelopmentMySQl,
     'production': Production,
     'test': Test,
     'heroku': HerokuConfig,
