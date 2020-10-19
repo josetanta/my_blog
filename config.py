@@ -31,6 +31,11 @@ class Development(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///db/site-dev.sqlite3'
 
 
+class DevelopmentMySQl(Config):
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://adminblog:password@localhost/dbblog'
+
+
 class Production(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:///db/site-production.sqlite3'
@@ -64,6 +69,7 @@ class Test(Config):
 
 config = {
     'development': Development,
+    'developmentmysql': Development,
     'production': Production,
     'test': Test,
     'heroku': HerokuConfig,

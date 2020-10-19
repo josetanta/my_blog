@@ -26,7 +26,7 @@ def post(slug):
 
             # Traer el path del upload Post
             image_current_del = os.path.join(
-                current_app.root_path, "html\\static\\uploads\\posts", post.upload)
+                current_app.root_path, "web\\static\\uploads\\posts", post.upload)
 
             if request.files['upload']:
 
@@ -111,9 +111,9 @@ def comment(slug):
         return redirect(url_for('.post', slug=post.slug))
 
 
-@posts.route('/posts/<slug>/comments/<id>', methods=['DELETE', 'POST'])
+@posts.route('/posts/<slug>/comments/<comment_id>', methods=['DELETE', 'POST'])
 @login_required
-def comment_delete(slug=None, id=None):
+def comment_delete(slug=None, comment_id=None):
     post = Post.query.filter_by(slug=slug).first()
     comment = Comment.query.filter_by(post=post).first()
 

@@ -12,11 +12,11 @@ def index():
     return render_template('admin/index.html', title='Dashboard')
 
 
-@admin.route('/status_post/<int:id>', methods=['GET'])
+@admin.route('/status_post/<int:post_id>', methods=['GET'])
 @login_required
 @admin_required
-def ban(id):
-    post = Post.query.get_or_404(id)
+def ban(post_id):
+    post = Post.query.get_or_404(post_id)
     if post.status:
         post.status = False
     else:
@@ -54,9 +54,9 @@ def users():
     return render_template('admin/users.html', title='Admin | Users', users=users)
 
 
-@admin.route('/users/<int:id>', methods=['GET'])
+@admin.route('/users/<int:user_id>', methods=['GET'])
 @login_required
 @admin_required
-def show_user(id):
-    user = User.query.get_or_404(id)
+def show_user(user_id):
+    user = User.query.get_or_404(user_id)
     return render_template('users/show.html', title=user.username, user=user)

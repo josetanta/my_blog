@@ -13,11 +13,11 @@ from flask import (
 )
 from flask_login import current_user, login_user, logout_user, login_required
 from .forms import RegisterForm, LoginForm, AccountForm
-from app.decorators import permission_required
-from app.utils import save_upload
-from app.models import User, db, Permission
-from app.mail import send_token_confirmation
-from app.main.forms import SendEmailForm
+from ..decorators import permission_required
+from ..utils import save_upload
+from ..models import User, db, Permission
+from ..mail import send_token_confirmation
+from ..main.forms import SendEmailForm
 from . import users
 
 
@@ -102,7 +102,7 @@ def account(slug=None, id=None):
 
         # Traer el path del upload del usuario logueado (o en session)
         image_current_del = os.path.join(
-            current_app.root_path, "html\\static\\uploads\\users", current_user.upload)
+            current_app.root_path, "web\\static\\uploads\\users", current_user.upload)
 
         if request.files['upload']:
 

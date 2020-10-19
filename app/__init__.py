@@ -20,8 +20,8 @@ migrate = Migrate()
 def create_app(config_name):
     app = Flask(__name__,
                 instance_relative_config=True,
-                template_folder=os.path.join(BASE_DIR, 'html/templates'),
-                static_folder=os.path.join(BASE_DIR, 'html/static')
+                template_folder=os.path.join(BASE_DIR, 'templates'),
+                static_folder=os.path.join(BASE_DIR, 'static')
                 )
     app.config.from_object(config.get(config_name))
     config[config_name].init_app(app)
@@ -29,8 +29,8 @@ def create_app(config_name):
     csrf.init_app(app)
     login_manager.init_app(app)
     db.init_app(app)
-    pagedown.init_app(app)
     migrate.init_app(app, db)
+    pagedown.init_app(app)
 
     from .main import main
     app.register_blueprint(main)

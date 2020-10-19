@@ -1,8 +1,8 @@
 import re
 import unittest
 from flask import current_app, url_for
-from app import create_app, db
-from app.models import User, Role
+from ..app import create_app, db
+from ..app.models import User, Role
 
 
 class BlogClientTestCase(unittest.TestCase):

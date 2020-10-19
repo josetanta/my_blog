@@ -1,4 +1,3 @@
-import secrets
 import bleach
 from markdown import markdown
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -122,6 +121,7 @@ class User(UserMixin, db.Model):
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
         token = s.dumps({'user_id': self.id}).decode('utf-8')
+        return token
 
     @staticmethod
     def verificar_reset_token(token):
@@ -265,7 +265,7 @@ class Post(UserMixin, db.Model):
         ]
         target.content_html = bleach.linkify(
             bleach.clean(
-                markdown(value, output_format='html'),
+                markdown(value, output_format='web'),
                 tags=allowed_tags, strip=True
             )
         )

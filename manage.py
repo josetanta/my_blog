@@ -1,12 +1,11 @@
+import os
+from dotenv import load_dotenv
+
 from app.models import User, Post, Role, Follow, Comment
 from flask_migrate import MigrateCommand, upgrade
 from flask_script import Manager, Shell
 from app import create_app, db, migrate
-from flask import current_app
-import os
-from dotenv import load_dotenv
 load_dotenv(verbose=True)
-
 
 app = create_app(os.getenv('FLASK_ENV'))
 print(os.getenv('FLASK_ENV'))
@@ -37,7 +36,7 @@ def test_flask():
 
 @manager.command
 def seed():
-    from app.seed import create_users
+    from .app.seed import create_users
     """
 	Ejecuta el seed.py, creación de factories
 	"""
