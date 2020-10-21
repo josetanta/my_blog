@@ -11,7 +11,7 @@ def save_upload(img, model='', size=200):
     t_img = name_token_img + b_img
 
     image_path = os.path.join(current_app.root_path,
-                              f'html/static/uploads/{model}', t_img)
+                              f'/static/uploads/{model}', t_img)
     save_img = Image.open(img)
     save_img.thumbnail((size, size))
     save_img.save(image_path)

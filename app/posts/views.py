@@ -26,7 +26,7 @@ def post(slug):
 
             # Traer el path del upload Post
             image_current_del = os.path.join(
-                current_app.root_path, "web\\static\\uploads\\posts", post.upload)
+                current_app.root_path, "static\\uploads\\posts", post.upload)
 
             if request.files['upload']:
 

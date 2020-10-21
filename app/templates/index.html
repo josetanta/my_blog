@@ -1,15 +1,26 @@
 {% extends 'base.html' %}
 {% block contenido %}
 <div class="row">
+  <div class="col col-12">
+    <div class="jumbotron contenedor">
+      <img class="img-fluid" src="{{ url_for('static', filename='uploads/redes.jpg') }}" alt="">
+      <div class="centrado container-fluid">
+        <h1 class="display-4">Redes de Computadoras</h1>
+        <p class="lead">Servidor Web en Centos 8, Flask, Gunicorn, Nginx 😀</p>
+        <hr class="my-4">
+        <p>Redes de Computadoras</p>
+        <a class="btn-sm btn btn-outline-primary text-light" href="#" role="button">Descargar Trabajo</a>
+      </div>
+    </div>
+
+  </div>
   <div class="col col-sm-8 col-md-8">
-    <a class="link-routes" href="{{ url_for('posts.new') }}">Crear Nuevo Post</a>
     {% if posts %}
     {% for post in posts.items %}
-    {{ g.user }}
-    <fieldset class="shadow post-show my-5">
+    <div class="shadow post-show my-5">
       <legend>
         <h3><a class="text-info text-decoration-none"
-               href="{{ url_for('posts.post', slug = post.slug) }}">{{post.title}}</a></h3>
+            href="{{ url_for('posts.post', slug = post.slug) }}">{{post.title}}</a></h3>
       </legend>
       <div id="post-public">
         {% if post.upload %}
@@ -35,7 +46,7 @@
           </a>
         </div>
       </div>
-    </fieldset>
+    </div>
     {% endfor %}
     {% endif %}
     <div class="my-3">
@@ -52,19 +63,6 @@
       {% endif %}
       {% endfor %}
       {% endif %}
-    </div>
-  </div>
-  <div class="col col-sm-4 col-md-4">
-    <div class="content-section shadow">
-      <h3>Informaciones de ultimas instancias</h3>
-      <p class='text-muted'>You can put any information here you'd like.
-      <ul class="list-group">
-        <li class="list-group-item">Latest Posts</li>
-        <li class="list-group-item">Announcements</li>
-        <li class="list-group-item">Calendars</li>
-        <li class="list-group-item">etc</li>
-      </ul>
-      </p>
     </div>
   </div>
 </div>

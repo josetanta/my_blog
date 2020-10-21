@@ -102,7 +102,7 @@ def account(slug=None, id=None):
 
         # Traer el path del upload del usuario logueado (o en session)
         image_current_del = os.path.join(
-            current_app.root_path, "web\\static\\uploads\\users", current_user.upload)
+            current_app.root_path, "static\\uploads\\users", current_user.upload)
 
         if request.files['upload']:
 
@@ -161,7 +161,8 @@ def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('main.home'))
     elif current_user.confirm(token):
-        flash(f'Felicidades {current_user.username} te acabas de unir a nuestra comunidad', 'success')
+        flash(
+            f'Felicidades {current_user.username} te acabas de unir a nuestra comunidad', 'success')
     else:
         flash('La confirmación de cuenta a expirado', 'info')
     return redirect(url_for('main.home'))

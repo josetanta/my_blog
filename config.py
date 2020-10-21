@@ -33,7 +33,7 @@ class Development(Config):
 
 class DevelopmentMySQl(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://adminblog:password@localhost/dbblog'
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://adminblog:password@localhost/blogbd"
 
 
 class Production(Config):
