@@ -16,50 +16,51 @@
 		</thead>
 		<tbody>
 			{% if posts %}
-				{% for post in posts %}
-					<tr id="post_{{ post.slug }}" {%if not post.status%}class="posted-baned-bg"{%endif%}>
-						<td>{{ post.id }}</td>
-						{%if not post.status%}
-						<td class="posted-baned">{{ post.title }}</td>
-					{% else %}
-						<td><a href="{{ url_for('posts.post', slug = post.slug) }}">{{ post.title | truncate(50)}}</a></td>
-						{%endif%}
-						<td class="w-25 {%if not post.status%}posted-baned{%endif%}">{{ post.content | truncate(100)}}</td>
-						<td><a href="{{ url_for('admin.show_user', id = post.author.id ) }}">{{ post.author.email }}</a></td>
-						<td>{{ post.date_register.strftime('%X %d-%h-%Y') }}</td>
-					<td class="post-flags {%if post.status %}text-success{% else %}text-danger{% endif %}" id="flag-{{ post.id }}">
-				{%if post.status %}Publicado{% else %}Suspendido{% endif %}
-			</td>
-			<td>
-			<button id="ban_post_{{ post.id }}" class="{%if post.status %}btn-sm btn btn-danger{% else %}btn-sm btn btn-success{% endif %}">
-		{%if post.status %}Suspender{% else %}Dar Alta{% endif %}
-		</button>
-	</td>
-	<script>
-			$(function () {
-				$('#ban_post_{{ post.id }}').click(function(event) {
-					event.preventDefault();
-					$.getJSON("{{ url_for('admin.ban', id = post.id) }}", function(data) {
-						if(data.status === false){
-							let e =`<button id="ban_post_{{ post.id }}" type="submit" class="btn-sm btn btn-success">Dar Alta</button>`;
-							let flag =`<td class="post-flags text-danger" id="flag">Suspendido</td>`;
-							$('#ban_post_{{ post.id }}').replaceWith(e);
-							$('#flag-{{ post.id }}').replaceWith(flag);
-						}
-						else if (data.status === true){
-							let e =`<button id="ban_post_{{ post.id }}" type="submit" class="btn-sm btn btn-danger">Suspender</button>`;
-							let flag =`<td class="post-flags text-success" id="flag">Publicado</td>`;
-							$('#ban_post_{{ post.id }}').replaceWith(e);
-							$('#flag-{{ post.id }}').replaceWith(flag);
-						}
+			{% for post in posts %}
+			<tr id="post_{{ post.slug }}" {%if not post.status%}class="posted-baned-bg" {%endif%}>
+				<td>{{ post.id }}</td>
+				{%if not post.status%}
+				<td class="posted-baned">{{ post.title }}</td>
+				{% else %}
+				<td><a href="{{ url_for('posts.post', slug = post.slug) }}">{{ post.title | truncate(50)}}</a></td>
+				{%endif%}
+				<td class="w-25 {%if not post.status%}posted-baned{%endif%}">{{ post.content | truncate(100)}}</td>
+				<td><a href="{{ url_for('admin.show_user', user_id = post.author.id ) }}">{{ post.author.email }}</a></td>
+				<td>{{ post.date_register.strftime('%X %d-%h-%Y') }}</td>
+				<td class="post-flags {%if post.status %}text-success{% else %}text-danger{% endif %}" id="flag-{{ post.id }}">
+					{%if post.status %}Publicado{% else %}Suspendido{% endif %}
+				</td>
+				<td>
+					<button id="ban_post_{{ post.id }}"
+						class="{%if post.status %}btn-sm btn btn-danger{% else %}btn-sm btn btn-success{% endif %}">
+						{%if post.status %}Suspender{% else %}Dar Alta{% endif %}
+					</button>
+				</td>
+				<script>
+					$(function () {
+						$('#ban_post_{{ post.id }}').click(function (event) {
+							event.preventDefault();
+							$.getJSON("{{ url_for('admin.ban', post_id = post.id) }}", function (data) {
+								if (data.status === false) {
+									let e = `<button id="ban_post_{{ post.id }}" type="submit" class="btn-sm btn btn-success">Dar Alta</button>`;
+									let flag = `<td class="post-flags text-danger" id="flag">Suspendido</td>`;
+									$('#ban_post_{{ post.id }}').replaceWith(e);
+									$('#flag-{{ post.id }}').replaceWith(flag);
+								}
+								else if (data.status === true) {
+									let e = `<button id="ban_post_{{ post.id }}" type="submit" class="btn-sm btn btn-danger">Suspender</button>`;
+									let flag = `<td class="post-flags text-success" id="flag">Publicado</td>`;
+									$('#ban_post_{{ post.id }}').replaceWith(e);
+									$('#flag-{{ post.id }}').replaceWith(flag);
+								}
+							});
+						});
 					});
-				});
-			});
-	</script>
-	<tr>
-	{% endfor %}
-{% endif %}
-</tbody>
-</table>
+				</script>
+			<tr>
+				{% endfor %}
+				{% endif %}
+		</tbody>
+	</table>
 </div>
 {% endblock %}

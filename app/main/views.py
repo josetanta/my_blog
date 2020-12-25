@@ -1,4 +1,5 @@
 import asyncio
+import os
 from flask import (
     render_template,
     flash,
@@ -6,6 +7,7 @@ from flask import (
     request,
     url_for,
     current_app,
+    make_response
 )
 from flask_login import current_user, login_required
 from ..models import Post
@@ -35,11 +37,14 @@ def home():
     posts = Post.query.filter_by(status=True) \
         .order_by(Post.date_register.desc()) \
         .paginate(page=page, per_page=4)
-    return render_template('index.html', title='Home', posts=posts, form_email=form_email)
+
+    template = render_template(
+        'index.html', title='Home', posts=posts, form_email=form_email)
+    return template
 
 
-@main.route('/send_message', methods=['POST'])
-@login_required
+@ main.route('/send_message', methods=['POST'])
+@ login_required
 def send_message():
     form_email = SendEmailForm()
     r = request.form.to_dict()
@@ -51,6 +56,6 @@ def send_message():
         return redirect(url_for('.home'))
 
 
-@main.route('/about')
+@ main.route('/about')
 def about():
     return render_template('about.html', title='About')

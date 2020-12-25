@@ -11,7 +11,12 @@ from flask import (
     session,
     current_app
 )
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import (
+    current_user,
+    login_user,
+    logout_user,
+    login_required
+)
 from .forms import RegisterForm, LoginForm, AccountForm
 from ..decorators import permission_required
 from ..utils import save_upload
@@ -81,9 +86,9 @@ def login():
 def logout():
     if 'username' in session:
         session.pop('username')
-    flash('Cerraste tu Sesión', 'warning')
+    flash('Cerraste tu Sesión', 'success')
     logout_user()
-    return redirect(url_for('.login'))
+    return redirect(url_for('main.home'))
 
 
 @users.route('/auth/<slug>', methods=['GET'])
@@ -102,7 +107,7 @@ def account(slug=None, id=None):
 
         # Traer el path del upload del usuario logueado (o en session)
         image_current_del = os.path.join(
-            current_app.root_path, "web\\static\\uploads\\users", current_user.upload)
+            current_app.root_path, "static\\uploads\\users", current_user.upload)
 
         if request.files['upload']:
 
@@ -161,7 +166,8 @@ def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('main.home'))
     elif current_user.confirm(token):
-        flash(f'Felicidades {current_user.username} te acabas de unir a nuestra comunidad', 'success')
+        flash(
+            f'Felicidades {current_user.username} te acabas de unir a nuestra comunidad', 'success')
     else:
         flash('La confirmación de cuenta a expirado', 'info')
     return redirect(url_for('main.home'))

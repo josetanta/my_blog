@@ -1,35 +1,67 @@
 .link-routes {
-	text-decoration: none;
-	margin: 10px 5px;
-	outline: none;
-	padding: 4px;
-	transition: .4s all ease;
-	border-radius: 10%;
+  text-decoration: none;
+  margin: 10px 5px;
+  outline: none;
+  padding: 4px;
+  transition: 0.4s all ease;
+  border-radius: 10%;
 }
 
 .link-routes:hover {
-	color: rgba(170, 180, 21, .9);
-	text-decoration: none;
-	background-color: rgba(244,230,212, .5);
+  color: rgba(170, 180, 21, 0.9);
+  text-decoration: none;
+  background-color: rgba(244, 230, 212, 0.5);
 }
 
 .register-view {
-	width: 100%;
+  width: 100%;
 }
 
-@media screen and (max-width:360px) {
-	.register-view {
-		width: 100%;
-	}
+@media screen and (max-width: 360px) {
+  .register-view {
+    width: 100%;
+  }
 }
-
 
 .register-img {
-	width: auto;
+  width: auto;
 }
 
 @media screen and (min-width: 360px) {
-	.register-img {
-		width: 100%;
-	}
+  .register-img {
+    width: 100%;
+  }
+}
+
+.contenedor {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  color: cornsilk;
+}
+.contenedor img {
+  opacity: 0.89;
+  filter: brightness(45%);
+}
+
+.texto-encima {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+.centrado {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media screen and (min-width: 90px) {
+  .centrado {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2px;
+  }
 }

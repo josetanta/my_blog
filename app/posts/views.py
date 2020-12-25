@@ -26,7 +26,7 @@ def post(slug):
 
             # Traer el path del upload Post
             image_current_del = os.path.join(
-                current_app.root_path, "web\\static\\uploads\\posts", post.upload)
+                current_app.root_path, "static/uploads/posts", post.upload)
 
             if request.files['upload']:
 
@@ -83,7 +83,7 @@ def new():
         # Pregunstar si existe un archivo en el input(esto desde el request)
         if request.files['upload']:
             # Crear un nuevo upload para el post
-            img = save_upload(form.upload.data)
+            img = save_upload(form.upload.data, model='posts')
 
             # Se asigna como nuevo upload al post
             new_post.upload = img

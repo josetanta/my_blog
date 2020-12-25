@@ -14,7 +14,7 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 class PostCreateForm(FlaskForm):
     title = StringField('Titulo', validators=[DataRequired(), Length(6, 120)])
     pagedown = PageDownField('Contenido', validators=[DataRequired()])
-    upload = FileField('Imagen del Post', validators=[
+    upload = FileField('Imagen', validators=[
         FileAllowed(ALLOWED_EXTENSIONS)])
     submit = SubmitField('Publicar Post')
 
@@ -35,4 +35,4 @@ class PostCreateForm(FlaskForm):
 
 class CommentForm(FlaskForm):
     body = TextAreaField('Mi comentario', validators=[DataRequired()])
-    submit = SubmitField('Publicar mi comentario')
+    submit = SubmitField('Comentar')

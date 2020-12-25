@@ -18,7 +18,7 @@
 			{% for user in users %}
 			<tr id="user_{{ user.slug }}">
 				<td>{{ user.username }}</td>
-				<td><a href="{{ url_for('admin.show_user', id = user.id ) }}">{{ user.email }}</a></td>
+				<td><a href="{{ url_for('admin.show_user', user_id = user.id ) }}">{{ user.email }}</a></td>
 				<td>{{ user.followers.all() | count }}</td>
 				<td>{{ user.followed.all() | count }}</td>
 				<td>{{ user.posts | count }}</td>
