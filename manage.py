@@ -8,7 +8,6 @@ from app import create_app, db, migrate
 load_dotenv(verbose=True)
 
 app = create_app(os.getenv('FLASK_ENV'))
-print(os.getenv('FLASK_ENV'))
 manager = Manager(app)
 
 

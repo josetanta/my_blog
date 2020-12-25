@@ -265,7 +265,7 @@ class Post(UserMixin, db.Model):
         ]
         target.content_html = bleach.linkify(
             bleach.clean(
-                markdown(value, output_format='web'),
+                markdown(value, output_format='html'),
                 tags=allowed_tags, strip=True
             )
         )

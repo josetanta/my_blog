@@ -11,7 +11,12 @@ from flask import (
     session,
     current_app
 )
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import (
+    current_user,
+    login_user,
+    logout_user,
+    login_required
+)
 from .forms import RegisterForm, LoginForm, AccountForm
 from ..decorators import permission_required
 from ..utils import save_upload
@@ -81,9 +86,9 @@ def login():
 def logout():
     if 'username' in session:
         session.pop('username')
-    flash('Cerraste tu Sesión', 'warning')
+    flash('Cerraste tu Sesión', 'success')
     logout_user()
-    return redirect(url_for('.login'))
+    return redirect(url_for('main.home'))
 
 
 @users.route('/auth/<slug>', methods=['GET'])
