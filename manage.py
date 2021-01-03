@@ -1,10 +1,10 @@
 import os
 from dotenv import load_dotenv
-
 from app.models import User, Post, Role, Follow, Comment
 from flask_migrate import MigrateCommand, upgrade
 from flask_script import Manager, Shell
 from app import create_app, db, migrate
+
 load_dotenv(verbose=True)
 
 app = create_app(os.getenv('FLASK_ENV'))

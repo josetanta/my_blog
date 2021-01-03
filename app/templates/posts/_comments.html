@@ -1,10 +1,11 @@
 <div class="row my-3 border py-2 pr-1">
-  {% for comment in post.comments %}
+  {% for comment in comments_of_post %}
   <div class="col-10 media mb-4" id="comments">
     <img src="{{ comment.author.upload_path }}" class="mr-3 comment-img-author" alt="...">
     <div class="media-body">
-      <a href="{{ url_for('users.show', slug = comment.author.slug) }}">{{ comment.author.username
-        }}</a>
+      <a href="{{ url_for('users.show', slug = comment.author.slug) }}"><b>{{ comment.author.username
+          }}</b></a> <br> <b class="small text-secondary">Publicado: </b><em class="text-secondary">{{
+        momentjs(comment.timestamp).formatNow() }}</em>
       <div class="text-break text-justify">
         {{ comment.body }}
       </div>

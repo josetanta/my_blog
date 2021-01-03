@@ -5,13 +5,6 @@ from ..decorators import admin_required
 from ..models import Post, User, db, Role, Comment
 
 
-@admin.route('/')
-@login_required
-@admin_required
-def index():
-    return render_template('admin/index.html', title='Dashboard')
-
-
 @admin.route('/status_post/<int:post_id>', methods=['GET'])
 @login_required
 @admin_required
@@ -25,6 +18,7 @@ def ban(post_id):
     return post.get_id()
 
 
+@admin.route('/')
 @admin.route('/posts/', methods=['GET'])
 @login_required
 @admin_required

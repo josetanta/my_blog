@@ -16,6 +16,9 @@ class PostCreateForm(FlaskForm):
     pagedown = PageDownField('Contenido', validators=[DataRequired()])
     upload = FileField('Imagen', validators=[
         FileAllowed(ALLOWED_EXTENSIONS)])
+
+    url_image = StringField('Url de Image')
+
     submit = SubmitField('Publicar Post')
 
     def validate_title(self, title):

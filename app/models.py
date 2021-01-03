@@ -85,7 +85,7 @@ class User(UserMixin, db.Model):
     date_register = db.Column(
         db.DateTime, default=datetime.now, nullable=False)
     status = db.Column(db.Boolean, default=True, index=True)
-    upload = db.Column(db.String(200), nullable=True, default='default.jpg')
+    upload = db.Column(db.String(200), nullable=True, default='def')
     role_id = db.Column(db.Integer, db.ForeignKey(
         'roles.id'), index=True, nullable=False)
     confirmed = db.Column(db.Boolean, default=False)
@@ -243,9 +243,11 @@ class Post(UserMixin, db.Model):
     content_html = db.Column(db.Text, nullable=False)
     slug = db.Column(db.String(100), nullable=False, unique=True, index=True)
     date_register = db.Column(
-        db.DateTime, default=datetime.now, nullable=False)
+        db.DateTime, default=datetime.utcnow, nullable=False)
     status = db.Column(db.Boolean, default=True, index=True)
-    upload = db.Column(db.String(200), nullable=True, default='default.jpg')
+    upload = db.Column(db.String(200), nullable=True, default='def')
+    url_image = db.Column(db.String(600), nullable=True, default='')
+
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
     comments = db.relationship(
         'Comment', backref='post', lazy=True, cascade="all, delete-orphan")
@@ -308,7 +310,7 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), index=True)
     publishied = db.Column(db.Boolean, default=True)
-    timestamp = db.Column(db.DateTime, default=datetime.now)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_json(self):
         return dict({

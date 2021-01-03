@@ -48,8 +48,7 @@
 				</button>
 				<div class="dropdown-menu" aria-labelledby="dropdownOptionsAccount">
 					{% if current_user.is_administrator %}
-					<a class="dropdown-item" href="{{ url_for('admin.index') }}"><i class="fas fa-columns"></i> Ir al
-						Dashboard</a>
+					<a class="dropdown-item" href="{{ url_for('admin.posts') }}"><i class="fas fa-columns"></i> Administrar</a>
 					{% endif %}
 					<a class="dropdown-item" href="{{ url_for('users.show', slug = current_user.slug) }}"><i
 							class="fas fa-user-circle"></i> Mi Perfil</a>

@@ -65,3 +65,8 @@
     font-size: 2px;
   }
 }
+
+.img-404 {
+  max-width: 100%;
+  max-height: 100%;
+}

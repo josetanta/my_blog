@@ -1,32 +1,33 @@
 {% extends 'base.html' %}
 {% block contenido %}
-<div id="content">
-  <h2>Posts Publicados</h2>
-  <table class="table table-responsive table-hover">
-    <thead>
-      <tr class="text-info">
-        <th>Comentraios - ID</th>
-        <th>User</th>
-        <th>Post</th>
-        <th>Contenido</th>
-        <th>Publicado</th>
-        <th>Estado de Publicación</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for comment in comments %}
-      <tr>
-        <td>{{ comment.id }}</td>
-        <td>{{ comment.author.email }}</td>
-        <td>{{ comment.post.title }}</td>
-        <td>{{ comment.body | truncate(60)}}</td>
-        <td>{{ comment.timestamp }}</td>
-        <td class="text-{%if comment.publishied%}success{%else%}danger{%endif%}">
-          {%if comment.publishied%}Publicado{%else%}Restringido{%endif%}
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<div class="row">
+  <div class="col-2">{% include 'admin/_btn_group.html' %}</div>
+  <div class="col-10">
+    <h2>Posts Publicados</h2>
+    <table class="table table-responsive table-hover">
+      <thead>
+        <tr class="text-info">
+          <th>User</th>
+          <th>Post</th>
+          <th>Contenido</th>
+          <th>Publicado</th>
+          <th>Estado de Publicación</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for comment in comments %}
+        <tr>
+          <td>{{ comment.author.email }}</td>
+          <td>{{ comment.post.title }}</td>
+          <td>{{ comment.body | truncate(40)}}</td>
+          <td>{{ momentjs(comment.timestamp).formatNow() }}</td>
+          <td class="text-{%if comment.publishied%}success{%else%}danger{%endif%}">
+            {%if comment.publishied%}Publicado{% else %}Restringido{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock contenido %}

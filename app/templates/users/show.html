@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-md-4">
       <div class="card" style="width: 18rem;">
-        {% if user.upload %}
+        {% if user.upload|length > 3 %}
         <img src="{{ user.upload_path }}" class="card-img-top" alt="...">
         {% endif %}
         <div class="card-body">
@@ -26,11 +26,11 @@
         <div class="card-body">
           {% if not current_user.is_following(user) %}
           <button type="button" id="follow" data-url="{{ url_for('users.follow', slug = user.slug) }}"
-                  class="btn-sm btn btn-success">Seguir
+            class="btn-sm btn btn-success">Seguir
           </button>
           {% else %}
           <button type="button" id="unfollow" data-url="{{ url_for('users.unfollow', slug = user.slug) }}"
-                  class="btn-sm btn btn-secondary">Dejar de seguir
+            class="btn-sm btn btn-secondary">Dejar de seguir
           </button>
           {% endif %}
         </div>
