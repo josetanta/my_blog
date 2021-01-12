@@ -118,7 +118,7 @@ class User(UserMixin, db.Model):
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
 
-    def get_reset_token(self, expires_sec=1800):
+    def get_reset_token(self, expires_sec=3600):
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
         token = s.dumps({'user_id': self.id}).decode('utf-8')
         return token
@@ -215,6 +215,20 @@ class User(UserMixin, db.Model):
     def password(self, password):
         self.password_hash = generate_password_hash(password)
 
+    @property
+    def followers_list(self):
+        return db.session.query(User)\
+            .select_from(Follow)\
+            .filter_by(followed_id=self.id)\
+            .join(User, Follow.follower_id == User.id).all()
+
+    @property
+    def followeds_list(self):
+        return db.session.query(User)\
+            .select_from(Follow)\
+            .filter_by(follower_id=self.id)\
+            .join(User, Follow.followed_id == User.id).all()
+
     def __repr__(self):
         return f"<User {self.email} {self.slug}>"
 
@@ -244,7 +258,7 @@ class Post(UserMixin, db.Model):
     slug = db.Column(db.String(100), nullable=False, unique=True, index=True)
     date_register = db.Column(
         db.DateTime, default=datetime.utcnow, nullable=False)
-    status = db.Column(db.Boolean, default=True, index=True)
+    publishied = db.Column(db.Boolean, default=True, index=True)
     upload = db.Column(db.String(200), nullable=True, default='def')
     url_image = db.Column(db.String(600), nullable=True, default='')
 
@@ -286,7 +300,7 @@ class Post(UserMixin, db.Model):
         obj = dict({
             'title': self.title,
             'content': self.content,
-            'status': self.status,
+            'publishied': self.publishied,
             'author': self.author.username,
             'comments': [comment.to_json() for comment in self.comments]
         })
@@ -295,7 +309,7 @@ class Post(UserMixin, db.Model):
     def get_id(self):
         obj = dict({
             'id': self.id,
-            'status': self.status,
+            'publishied': self.publishied,
         })
         return obj
 
@@ -318,6 +332,13 @@ class Comment(db.Model):
             'body': self.body,
             'author': self.author.username
         })
+
+    def get_id(self):
+        obj = dict({
+            'id': self.id,
+            'publishied': self.publishied,
+        })
+        return obj
 
     def __repr__(self):
         return '<Comment %d %s>' % (self.id, self.publishied)

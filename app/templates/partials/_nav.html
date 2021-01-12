@@ -7,16 +7,16 @@
 
 	<div class="collapse navbar-collapse" id="basePost">
 		<ul class="navbar-nav mr-auto">
-			<li class="nav-item {% if request.path == url_for('main.home') %}active{% endif %}">
+			<li class="nav-item {{ isActive(url_for('main.home')) }}">
 				<a class="nav-link" href="{{ url_for('main.home') }}"><i class="fas fa-home-lg-alt"></i></a>
 			</li>
 			{% if current_user.is_authenticated %}
-			<li class="nav-item">
+			<li class="nav-item {{ isActive(url_for('posts.new')) }}">
 				<a href="{{ url_for('posts.new') }}" class="nav-link"><i class="far fa-plus-circle"></i>
 					Post</a>
 			</li>
 			{% endif %}
-			<li class="nav-item {% if request.path == url_for('main.about') %}active{% endif %}">
+			<li class="nav-item {{ isActive(url_for('main.about')) }}">
 				<a class="nav-link" href="{{ url_for('main.about') }}">Sobre nosotros</a>
 			</li>
 			<li class="nav-item">
@@ -25,10 +25,10 @@
 		</ul>
 		{% if not current_user.is_authenticated %}
 		<ul class="navbar-nav mr-0">
-			<li class="nav-item {% if request.path == url_for('users.register') %}active{% endif %}">
+			<li class="nav-item {{ isActive(url_for('users.register')) }}">
 				<a class="nav-link" href="{{ url_for('users.register') }}"><i class="far fa-user-plus"> </i> Registrarse</i></a>
 			</li>
-			<li class="nav-item {% if request.path == url_for('users.login') %}active{% endif %}">
+			<li class="nav-item {{ isActive(url_for('users.login')) }}">
 				<a class="nav-link" href="{{ url_for('users.login') }}"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
 			</li>
 		</ul>
@@ -38,7 +38,7 @@
 				<button class="btn btn-outline-light" type="button" id="dropdownOptionsAccount" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false">
 					<i class="fas fa-caret-down"></i>
-					{% if current_user.upload %}
+					{% if current_user.upload_path|length > 3 %}
 					<img class="account-img-profile" src="{{ current_user.upload_path }}"
 						href="{{ url_for('users.account', slug = current_user.slug)}}">
 					{% else %}

@@ -24,14 +24,15 @@
 }
 
 .register-img {
-  width: auto;
+  max-width: 400px;
+  max-height: 400px;
 }
 
-@media screen and (min-width: 360px) {
+/* @media screen and (min-width: 360px) {
   .register-img {
     width: 100%;
   }
-}
+} */
 
 .contenedor {
   position: relative;

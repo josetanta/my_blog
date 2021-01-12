@@ -7,7 +7,7 @@
     <div class="shadow post-show my-2">
       <legend>
         <h3><a class="text-info text-decoration-none"
-            href="{{ url_for('posts.post', slug = post.slug) }}">{{post.title}}</a></h3>
+            href="{{ url_for('posts.post_show', slug = post.slug) }}">{{post.title}}</a></h3>
       </legend>
       <div id="post-public">
         {% if post.upload|length > 3 %}
@@ -18,14 +18,16 @@
         <div class="post-content">
           {% if post.content_html %}
           <p class="text-justify text-break">{{ post.content_html | safe | truncate(150)}}</p>
-          <a class="text-primary" href="{{ url_for('posts.post', slug = post.slug) }}" title="{{ post.title }}">Más
+          <a class="text-primary" href="{{ url_for('posts.post_show', slug = post.slug) }}" title="{{ post.title }}">Más
             informacion aquí <i class="fad fa-external-link"></i></a>
           {% else %}
           <p class="text-justify text-break">{{ post.content | truncate(150)}}</p>
-          <a class="text-primary" href="{{ url_for('posts.post', slug = post.slug) }}" title="{{ post.title }}">Más
+          <a class="text-primary" href="{{ url_for('posts.post_show', slug = post.slug) }}" title="{{ post.title }}">Más
             informacion aquí <i class="fad fa-external-link"></i></a>
           {% endif %}
-          <p class="text-muted">{{ momentjs(post.date_register).calendar()}}</p>
+          <p class="text-muted">Publicado: <em>{{ momentjs(post.date_register).formatNow() }}</em> - {{
+            momentjs(post.date_register).calendar()}} </p>
+
         </div>
         <div class="meta-data">
           <a class="text-success text-decoration-none" href="{{ url_for('users.show', slug = post.author.slug ) }}">

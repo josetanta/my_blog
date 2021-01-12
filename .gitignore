@@ -13,3 +13,5 @@ __pycache__
 # Igonre Images
 *.png
 *.jpg
+
+.idea/

@@ -1,34 +1,37 @@
 {% extends 'base.html' %}
 {% from "_form_field.html" import form_field %}
 {% block contenido %}
-<fieldset class="form-group">
-  <legend class="border-bottom mb-4 title-account">{{ current_user.username }}</legend>
-  {% if current_user.upload %}
+<div class="row">
+  <fieldset class="col-6">
+    <legend class="border-bottom mb-4 title-account">{{ current_user.username }}</legend>
+    {% if current_user.upload %}
     <img class="image-account" src="{{ current_user.upload_path }}" alt="Foto de mi perfil">
-  {% endif %}
-  <form method="post" class="w-50 media-body" enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-      {{ form_field(form.username, class='form-control') }}
-    </div>
-    <div class="form-group">
-      {{ form_field(form.email, class='form-control') }}
-    </div>
-    <div class="form-group">
-      {{ form_field(form.name, class='form-control') }}
-    </div>
-    <div class="form-group">
-      {{ form_field(form.address, class='form-control') }}
-    </div>
-    <div class="form-group">
-      {{ form_field(form.upload) }}
-      <a href="{{ current_user.upload_path }}">Mi Imagen</a>
-    </div>
-    <div class="form-group">
-      {{ form.submit(class="btn btn-outline-primary") }}
-    </div>
+    {% endif %}
+    <form method="post" class="media-body" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+      <div class="form-group">
+        {{ form_field(form.username, class='form-control') }}
+      </div>
+      <div class="form-group">
+        {{ form_field(form.email, class='form-control') }}
+      </div>
+      <div class="form-group">
+        {{ form_field(form.name, class='form-control') }}
+      </div>
+      <div class="form-group">
+        {{ form_field(form.address, class='form-control') }}
+      </div>
+      <div class="form-group">
+        {{ form_field(form.upload, class='form-control') }}
+        Imagen de perfil: <a class="text-decoration-none" href="{{ current_user.upload_path }}">{{
+          current_user.upload_path.split('/')[-1] }}</a>
+      </div>
+      <div class="form-group">
+        {{ form.submit(class="btn btn-outline-primary btn-block") }}
+      </div>
 
-  </form>
-</fieldset>
+    </form>
+  </fieldset>
+</div>
 
 {% endblock contenido %}

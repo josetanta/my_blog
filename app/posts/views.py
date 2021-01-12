@@ -18,7 +18,10 @@ from ..utils import save_upload
 
 
 @posts.route('/post/<slug>', methods=['GET', 'POST', 'PUT'])
-def post(slug):
+def post_show(slug):
+    """
+    View for create new post and update
+    """
     post = Post.query.filter_by(slug=slug).first()
 
     form = PostCreateForm()
@@ -106,16 +109,20 @@ def new():
 @posts.route('/posts/<slug>/comments', methods=['POST'])
 @login_required
 @permission_required(Permission.COMMENT)
-def comment(slug):
+def comment(slug: str):
     c_form = CommentForm()
+    post = Post.query.filter_by(slug=slug).first()
     if current_user.is_authenticated and c_form.validate_on_submit():
-        post = Post.query.filter_by(slug=slug).first()
         comment = Comment(body=c_form.body.data, post=post,
                           author=current_user._get_current_object())
         db.session.add(comment)
         db.session.commit()
         flash('Se publico su comentario.', 'success')
-        return redirect(url_for('.post', slug=post.slug))
+        return redirect(url_for('.post_show', slug=post.slug))
+
+    else:
+        flash('Por favor el comentario debe tener más de 20 caracteres.', 'danger')
+        return redirect(url_for('.post_show', slug=post.slug))
 
 
 @posts.route('/posts/<slug>/comments/<comment_id>', methods=['DELETE', 'POST'])

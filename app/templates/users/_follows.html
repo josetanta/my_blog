@@ -1,0 +1,75 @@
+<!-- Modal Followers-->
+<div class="modal fade" id="Followers" tabindex="-1" aria-labelledby="FollowersLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="FollowersLabel">Seguidores</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-flush">
+          {% for follower in user.followers_list %}
+          <li class="list-item">
+            <div class="d-flex justify-content-around">
+              <img src="{{ follower.upload_path }}"> <a class="text-decoration-none"
+                href="{{ url_for('users.show', slug = follower.slug) }}">{{ follower.email }}</a>
+              <div class="count-follow">
+                <div>
+                  Seguidores <span class="badge badge-info">{{ follower.followers.all() | count }}</span>
+                </div>
+                <div>
+                  Siguiendo <span class="badge badge-secondary">{{ follower.followed.all() | count }}</span>
+                </div>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Followeds-->
+<div class="modal fade" id="Followeds" tabindex="-1" aria-labelledby="FollowedsLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="FollowedsLabel">Siguiendo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-flush">
+          {% for followed in user.followeds_list %}
+          <li class="list-item">
+            <div class="d-flex justify-content-around">
+              <img src="{{ followed.upload_path }}" alt=""> <a href="{{ url_for('users.show', slug = followed.slug) }}"
+                class="text-decoration-none">{{ followed.email
+                }}</a>
+              <div class="count-follow">
+                <div>
+                  Seguidores <span class="badge badge-info">{{ followed.followers.all() | count }}</span>
+                </div>
+                <div>
+                  Siguiendo <span class="badge badge-secondary">{{ followed.followed.all() | count }}</span>
+                </div>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -2,12 +2,14 @@
 {% from "_form_field.html" import form_field %}
 {% block contenido %}
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-7">
     <fieldset class="post-show">
       {% if post.author.upload|length > 1%}
       <img class="image-account-post" src="{{ post.author.upload_path }}" alt="Foto de mi perfil">
       {% endif %}
-      <span class="post-author-username text-info"><b>Autor: </b>{{ post.author.username}}</span>
+      <span class="post-author-username text-info"><b>Autor: </b><a
+          href="{{ url_for('users.show', slug = post.author.slug ) }}" class="text-decoration-none">{{
+          post.author.username}}</a></span>
       <p class="text-muted mt-1"><b>Publicado: </b><em>{{ momentjs(post.date_register).formatNow() }}</em></p>
       <legend>
         <h3 class="text-primary">{{post.title}}</h3>
@@ -32,7 +34,7 @@
       </div>
     </fieldset>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-5">
     {% if current_user.is_authenticated and current_user.can(Permission.COMMENT) %}
     <div class="ml-4">
       <h4 class="text-info">Comentarios</h4>
@@ -85,7 +87,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST" action="{{ url_for('posts.post', slug = post.slug) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ url_for('posts.post_show', slug = post.slug) }}" enctype="multipart/form-data">
           {{ form.hidden_tag() }}
           {% include 'posts/_form_posts.html' %}
           <div class="modal-footer">

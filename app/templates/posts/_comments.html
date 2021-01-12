@@ -1,17 +1,32 @@
-<div class="row my-3 border py-2 pr-1">
+<div class="row my-3 py-2 pr-1">
   {% for comment in comments_of_post %}
   <div class="col-10 media mb-4" id="comments">
+    {% if comment.publishied %}
     <img src="{{ comment.author.upload_path }}" class="mr-3 comment-img-author" alt="...">
     <div class="media-body">
-      <a href="{{ url_for('users.show', slug = comment.author.slug) }}"><b>{{ comment.author.username
-          }}</b></a> <br> <b class="small text-secondary">Publicado: </b><em class="text-secondary">{{
+      <a class="text-decoration-none" href="{{ url_for('users.show', slug = comment.author.slug) }}"><b>{{
+          comment.author.username
+          }}</b></a> <br> <b class="small text-secondary">Publicado: </b><em class="small text-secondary">{{
         momentjs(comment.timestamp).formatNow() }}</em>
       <div class="text-break text-justify">
         {{ comment.body }}
       </div>
     </div>
+    {% elif current_user.id == comment.author.id %}
+    <img src="{{ comment.author.upload_path }}" class="mr-3 comment-img-author" alt="...">
+    <div class="media-body">
+      <a class="text-decoration-none" href="{{ url_for('users.show', slug = comment.author.slug) }}"><b>{{
+          comment.author.username
+          }}</b></a> <br> <b class="small text-secondary">Publicado: </b><em class="small text-secondary">{{
+        momentjs(comment.timestamp).formatNow() }}</em>
+      <div class="text-break text-justify posted-baned">
+        {{ comment.body|truncate(20) }}
+      </div>
+      <small class="text-danger">Comentario restringido</small>
+    </div>
+    {% endif %}
   </div>
-  {% if current_user == comment.author %}
+  {% if current_user.id == comment.author.id %}
   <form action="{{ url_for('posts.comment_delete', slug = comment.post.slug, comment_id = comment.id) }}" method="post"
     class="col-2">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
@@ -20,9 +35,10 @@
     </button>
   </form>
   {% endif %}
+
   {% else %}
-  <p>Por el momento su post no tiene comentarios.
-  <h3><i class="far fa-empty-set"></i></h3>
-  </p>
+  <div class="col-10 media mb-4 d-flex justify-content-center align-items-center">
+    <h4>Por el momento su post no tiene comentarios.</h4>
+  </div>
   {% endfor %}
 </div>

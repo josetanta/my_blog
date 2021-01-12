@@ -1,25 +1,24 @@
 {% extends 'base.html' %}
 {% block contenido %}
-<div class="container-md">
+<div class="container">
   <div class="row">
     <div class="col-md-4">
-      <div class="card" style="width: 18rem;">
+      <div class="card">
         {% if user.upload|length > 3 %}
-        <img src="{{ user.upload_path }}" class="card-img-top" alt="...">
+        <img src="{{ user.upload_path }}" class="card-img-top image-account" alt="...">
         {% endif %}
         <div class="card-body">
           <h5 class="card-title">{{ user.username }}</h5>
           {% if user.name %}<p class="card-text">{{ user.name }}</p>{% endif %}
-          {% if user.address %}<p class="card-text">{{ user.address }}</p>{% endif %}
           <p class="card-text">{{ user.email }}</p>
-          <div class="mx-center">
-            <div class="p-1 text-center followers">
+          <div class="mx-center  d-flex justify-content-between">
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#Followers">
               Seguidores <span class="badge badge-light">{{ user.followers.all() | count }}</span>
-            </div>
-            <br>
-            <div class="p-1 text-center followeds">
+            </button>
+            <div class="my-2"></div>
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#Followeds">
               Siguiendo <span class="badge badge-light">{{ user.followed.all() | count }}</span>
-            </div>
+            </button>
           </div>
         </div>
         {% if current_user.is_authenticated and current_user != user %}
@@ -39,12 +38,12 @@
     </div>
 
     <div class="col-md-8">
-      <h3 class="text-teal">Post publicados por <b>{{ user.username }}</b></h3>
-      {% for post in user.posts %}
-      {% if post.status %}
-      <fieldset class="shadow container-md col-lg-10 col-sm-4 my-3">
+      <h3 class="text-teal">Post publicados por <b><em>{{ user.username }}</em></b></h3>
+      {% for post in posts %}
+      {% if post.publishied %}
+      <fieldset class="shadow col-lg-10 col-sm-4 my-3">
         <legend>
-          <h4 class="text-primary"><a href="{{ url_for('posts.post', slug = post.slug) }}">{{post.title}}</a></h4>
+          <h4 class="text-primary"><a href="{{ url_for('posts.post_show', slug = post.slug) }}">{{post.title}}</a></h4>
         </legend>
         {% if post.upload %}
         <img class="post-img" src="{{ post.upload_path }}" alt="Imagen del Post" style="width: 240px;">
@@ -54,8 +53,8 @@
         <p class="text-muted">{{ post.date_register.strftime('%d ,%B %Y') }}</p>
         <b class="my-3 text-secondary">Cometarios: {{ post.comments | count }}</b>
       </fieldset>
-      {% elif current_user == post.author and not post.status %}
-      <fieldset class="shadow container-md col-lg-10 col-sm-4 post-ban my-3">
+      {% elif current_user == post.author and not post.publishied %}
+      <fieldset class="shadow col-lg-10 col-sm-4 post-ban my-3">
         <legend>
           <h4 class="post-title-ban">{{post.title}}</h4>
         </legend>
@@ -66,4 +65,6 @@
     </div>
   </div>
 </div>
+
+{% include 'users/_follows.html' %}
 {% endblock %}

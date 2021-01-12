@@ -37,5 +37,6 @@ class PostCreateForm(FlaskForm):
 
 
 class CommentForm(FlaskForm):
-    body = TextAreaField('Mi comentario', validators=[DataRequired()])
-    submit = SubmitField('Comentar')
+    body = TextAreaField('Comentar', validators=[DataRequired(), Length(
+        min=20, message='Por favor el comentario debe tener más de 20 caracteres.')])
+    submit = SubmitField('Publicar')
