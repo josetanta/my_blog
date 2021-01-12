@@ -1,0 +1,8 @@
+<div class="btn-group-vertical">
+	<a class="btn btn-outline-primary my-2 {{ isActive(url_for('admin.posts')) }}"
+		href="{{ url_for('admin.posts') }}">Publicaciones</a>
+	<a class="btn btn-outline-primary my-2 {{ isActive(url_for('admin.users')) }}"
+		href="{{ url_for('admin.users') }}">Usuarios</a>
+	<a class="btn btn-outline-primary my-2 {{ isActive(url_for('admin.comments')) }}"
+		href="{{ url_for('admin.comments') }}">Comentarios</a>
+</div>

@@ -1,32 +1,34 @@
 {% extends 'base.html' %}
 
 {% block contenido %}
-<div id="content">
-	<h2>Usuarios Registrados</h2>
-	<table class="table table-responsive table-hover" id="table-ban">
-		<thead>
-			<tr class="text-info">
-				<th>Username</th>
-				<th>Email</th>
-				<th>Seguidores</th>
-				<th>Siguiendo</th>
-				<th>Post Publicados</th>
-			</tr>
-		</thead>
-		<tbody class="text-center">
-			{% if users %}
-			{% for user in users %}
-			<tr id="user_{{ user.slug }}">
-				<td>{{ user.username }}</td>
-				<td><a href="{{ url_for('admin.show_user', id = user.id ) }}">{{ user.email }}</a></td>
-				<td>{{ user.followers.all() | count }}</td>
-				<td>{{ user.followed.all() | count }}</td>
-				<td>{{ user.posts | count }}</td>
-			</tr>
-			{% endfor %}
-			{% endif %}
-		</tbody>
-	</table>
+<div class="row">
+	<div class="col-2">{% include 'admin/_btn_group.html' %}</div>
+	<div class="col-10">
+		<h2>Usuarios Registrados</h2>
+		<table class="table table-responsive table-hover" id="table-ban">
+			<thead>
+				<tr class="text-info">
+					<th>Username</th>
+					<th>Email</th>
+					<th>Seguidores</th>
+					<th>Siguiendo</th>
+					<th>Post Publicados</th>
+				</tr>
+			</thead>
+			<tbody class="text-center">
+				{% if users %}
+				{% for user in users %}
+				<tr id="user_{{ user.slug }}">
+					<td>{{ user.username }}</td>
+					<td><a href="{{ url_for('admin.show_user', user_id = user.id ) }}">{{ user.email }}</a></td>
+					<td>{{ user.followers.all() | count }}</td>
+					<td>{{ user.followed.all() | count }}</td>
+					<td>{{ user.posts | count }}</td>
+				</tr>
+				{% endfor %}
+				{% endif %}
+			</tbody>
+		</table>
+	</div>
 </div>
-<!-- aria-current="page" -->
 {% endblock contenido %}

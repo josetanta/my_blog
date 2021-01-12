@@ -1,45 +1,39 @@
 {% extends 'base.html' %}
 {% block contenido %}
 <div class="row">
-  <div class="col col-12">
-    <div class="jumbotron contenedor">
-      <img class="img-fluid" src="{{ url_for('static', filename='uploads/redes.jpg') }}" alt="">
-      <div class="centrado container-fluid">
-        <h1 class="display-4">Redes de Computadoras</h1>
-        <p class="lead">Servidor Web en Centos 8, Flask, Gunicorn, Nginx 😀</p>
-        <hr class="my-4">
-        <p>Redes de Computadoras</p>
-        <a class="btn-sm btn btn-outline-primary text-light" href="#" role="button">Descargar Trabajo</a>
-      </div>
-    </div>
-
-  </div>
-  <div class="col col-sm-8 col-md-8">
+  <div class="col col-sm-12 col-md-12">
     {% if posts %}
     {% for post in posts.items %}
-    <div class="shadow post-show my-5">
+    <div class="shadow post-show my-2">
       <legend>
         <h3><a class="text-info text-decoration-none"
-            href="{{ url_for('posts.post', slug = post.slug) }}">{{post.title}}</a></h3>
+            href="{{ url_for('posts.post_show', slug = post.slug) }}">{{post.title}}</a></h3>
       </legend>
       <div id="post-public">
-        {% if post.upload %}
+        {% if post.upload|length > 3 %}
         <img class="post-img" src="{{ post.upload_path }}" alt="Imagen del Post" style="width: 340px;">
+        {% elif post.url_image|length > 1 %}
+        <img class="post-img" src="{{ post.url_image }}" alt="Imagen del Pos" style="width: 340px;">
         {% endif %}
         <div class="post-content">
           {% if post.content_html %}
-          <p class="text-break">{{ post.content_html | safe | truncate(150)}}</p>
+          <p class="text-justify text-break">{{ post.content_html | safe | truncate(150)}}</p>
+          <a class="text-primary" href="{{ url_for('posts.post_show', slug = post.slug) }}" title="{{ post.title }}">Más
+            informacion aquí <i class="fad fa-external-link"></i></a>
           {% else %}
-          <p class="text-break">{{ post.content | truncate(150)}}</p>
+          <p class="text-justify text-break">{{ post.content | truncate(150)}}</p>
+          <a class="text-primary" href="{{ url_for('posts.post_show', slug = post.slug) }}" title="{{ post.title }}">Más
+            informacion aquí <i class="fad fa-external-link"></i></a>
           {% endif %}
-          <p class="text-muted">{{post.date_register.strftime('%d ,%B %Y')}}</p>
-        </div>
+          <p class="text-muted">Publicado: <em>{{ momentjs(post.date_register).formatNow() }}</em> - {{
+            momentjs(post.date_register).calendar()}} </p>
 
+        </div>
         <div class="meta-data">
           <a class="text-success text-decoration-none" href="{{ url_for('users.show', slug = post.author.slug ) }}">
-            {% if post.author.upload %}
+            {% if post.author.upload|length > 3 %}
             <img class="image-account-post" src="{{ post.author.upload_path }}" alt="Foto de mi perfil">
-            {% elif post.author.url_image %}
+            {% elif post.author.url_image|length > 1 %}
             <img class="image-account-post" src="{{ post.author.url_image }}" alt="Foto de mi perfil">
             {% endif %}
             <b>{{ post.author.username}}</b>

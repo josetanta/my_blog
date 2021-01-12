@@ -31,8 +31,8 @@ def admin_required(f):
 
 
 def permission_api(f):
-    '''
+    """
     Acceso del Cliente a la API, debera tener los permisos
     necesesarios para poder visualizar la data
-    '''
+    """
     return permission_required(Permission.PERMITE_API)(f)

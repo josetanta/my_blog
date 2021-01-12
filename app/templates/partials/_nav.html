@@ -7,23 +7,29 @@
 
 	<div class="collapse navbar-collapse" id="basePost">
 		<ul class="navbar-nav mr-auto">
-			<li class="nav-item {% if request.path == url_for('main.home') %}active{% endif %}">
-				<a class="nav-link" href="{{ url_for('main.home') }}">Inicio</a>
+			<li class="nav-item {{ isActive(url_for('main.home')) }}">
+				<a class="nav-link" href="{{ url_for('main.home') }}"><i class="fas fa-home-lg-alt"></i></a>
 			</li>
-			<li class="nav-item {% if request.path == url_for('main.about') %}active{% endif %}">
+			{% if current_user.is_authenticated %}
+			<li class="nav-item {{ isActive(url_for('posts.new')) }}">
+				<a href="{{ url_for('posts.new') }}" class="nav-link"><i class="far fa-plus-circle"></i>
+					Post</a>
+			</li>
+			{% endif %}
+			<li class="nav-item {{ isActive(url_for('main.about')) }}">
 				<a class="nav-link" href="{{ url_for('main.about') }}">Sobre nosotros</a>
 			</li>
 			<li class="nav-item">
-				<a href="{{ GITHUB }}" target="_blank" class="nav-link">GitHub</a>
+				<a href="{{ GITHUB }}" target="_blank" class="nav-link"><i class="fab fa-github"></i> GitHub</a>
 			</li>
 		</ul>
 		{% if not current_user.is_authenticated %}
 		<ul class="navbar-nav mr-0">
-			<li class="nav-item {% if request.path == url_for('users.register') %}active{% endif %}">
-				<a class="nav-link" href="{{ url_for('users.register') }}">Registrarse</a>
+			<li class="nav-item {{ isActive(url_for('users.register')) }}">
+				<a class="nav-link" href="{{ url_for('users.register') }}"><i class="far fa-user-plus"> </i> Registrarse</i></a>
 			</li>
-			<li class="nav-item {% if request.path == url_for('users.login') %}active{% endif %}">
-				<a class="nav-link" href="{{ url_for('users.login') }}">Iniciar Sesión</a>
+			<li class="nav-item {{ isActive(url_for('users.login')) }}">
+				<a class="nav-link" href="{{ url_for('users.login') }}"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
 			</li>
 		</ul>
 		{% else %}
@@ -31,19 +37,25 @@
 			<div class="nav-item btn-group dropleft ml-5">
 				<button class="btn btn-outline-light" type="button" id="dropdownOptionsAccount" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false">
-					{% if current_user.upload %}
-						<img class="account-img-profile" src="{{ current_user.upload_path }}" href="{{ url_for('users.account', slug = current_user.slug)}}">
+					<i class="fas fa-caret-down"></i>
+					{% if current_user.upload_path|length > 3 %}
+					<img class="account-img-profile" src="{{ current_user.upload_path }}"
+						href="{{ url_for('users.account', slug = current_user.slug)}}">
 					{% else %}
+					<i class="fas fa-user"></i>
 					{% endif %}
 					{{ current_user.username }}
 				</button>
 				<div class="dropdown-menu" aria-labelledby="dropdownOptionsAccount">
 					{% if current_user.is_administrator %}
-					<a class="dropdown-item" href="{{ url_for('admin.index') }}">Ir al Dashboard</a>
+					<a class="dropdown-item" href="{{ url_for('admin.posts') }}"><i class="fas fa-columns"></i> Administrar</a>
 					{% endif %}
-					<a class="dropdown-item" href="{{ url_for('users.show', slug = current_user.slug) }}">Mi Perfil</a>
-					<a class="dropdown-item" href="{{ url_for('users.account', slug = current_user.slug) }}">Editar Mi Perfil</a>
-					<a class="dropdown-item text-danger" href="{{ url_for('users.logout') }}">Salir</a>
+					<a class="dropdown-item" href="{{ url_for('users.show', slug = current_user.slug) }}"><i
+							class="fas fa-user-circle"></i> Mi Perfil</a>
+					<a class="dropdown-item" href="{{ url_for('users.account', slug = current_user.slug) }}"><i
+							class="fas fa-user-edit"></i> Editar Mi Perfil</a>
+					<a class="dropdown-item text-danger" href="{{ url_for('users.logout') }}"><i class="fas fa-sign-out-alt"></i>
+						Cerrar Sesión</a>
 				</div>
 			</div>
 		</ul>

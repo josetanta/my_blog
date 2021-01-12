@@ -22,7 +22,8 @@ class BlogClientTestCase(unittest.TestCase):
     def test_users_visit_home_page(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(current_app.config['APP_NAME'] in response.get_data(as_text=True))
+        self.assertTrue(
+            current_app.config['APP_NAME'] in response.get_data(as_text=True))
 
     def test_register_and_login(self):
         response = self.client.post('/register', data={
@@ -46,7 +47,8 @@ class BlogClientTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_auth_can_create_posts(self):
-        author = User(email='user1@mail.com', username='user1', confirmed=True, password='user')
+        author = User(email='user1@mail.com', username='user1',
+                      confirmed=True, password='user')
         response = self.client.post(url_for('posts.new'), data={
             'title': 'Post 1',
             'content': 'Content from Post 1',
@@ -61,7 +63,8 @@ class BlogClientTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_it_create_post_for_author(self):
-        user = User(email='user1@mail.com', username='user1', confirmed=True, password='user')
+        user = User(email='user1@mail.com', username='user1',
+                    confirmed=True, password='user')
         db.session.add(user)
         db.session.commit()
         response = self.client.post(url_for('posts.new'), data={
@@ -72,7 +75,8 @@ class BlogClientTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_it_create_post_view_errors_title(self):
-        user = User(email='user1@mail.com', username='user1', confirmed=True, password='user')
+        user = User(email='user1@mail.com', username='user1',
+                    confirmed=True, password='user')
         response = self.client.post(url_for('posts.new'), data={
             'title': '',
             'content': 'Content from Post 1',
@@ -81,7 +85,8 @@ class BlogClientTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_it_create_post_view_errors_content(self):
-        user = User(email='user1@mail.com', username='user1', confirmed=True, password='user')
+        user = User(email='user1@mail.com', username='user1',
+                    confirmed=True, password='user')
         response = self.client.post(url_for('posts.new'), data={
             'title': 'Post 1',
             'content': '',

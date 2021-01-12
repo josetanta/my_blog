@@ -1,65 +1,73 @@
 {% extends 'base.html' %}
 {% block contenido %}
-<div id="content">
-	<h2>Posts Publicados</h2>
-	<table class="table table-responsive table-hover" id="table-ban">
-		<thead>
-			<tr class="text-info">
-				<th>PostID</th>
-				<th>Titulo</th>
-				<th>Contenido</th>
-				<th>Autor</th>
-				<th>Publicado</th>
-				<th>Estado de Publicación</th>
-				<th>Acciones</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% if posts %}
+<div class="row">
+	<div class="col-2">{% include 'admin/_btn_group.html' %}</div>
+	<div class="col-10">
+		<h2>Posts Publicados</h2>
+		<table class="table table-responsive table-hover" id="table-ban">
+			<thead>
+				<tr class="text-info">
+					<th>Titulo</th>
+					<th>Contenido</th>
+					<th>Autor</th>
+					<th>Publicado</th>
+					<th>Estado de Publicación</th>
+					<th>Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
 				{% for post in posts %}
-					<tr id="post_{{ post.slug }}" {%if not post.status%}class="posted-baned-bg"{%endif%}>
-						<td>{{ post.id }}</td>
-						{%if not post.status%}
-						<td class="posted-baned">{{ post.title }}</td>
+				<tr id="post_{{ post.slug }}" class="{%if not post.publishied%}posted-baned-bg{%endif%}">
+					{%if not post.publishied%}
+					<td class="post_{{ post.slug }} posted-baned">{{ post.title }}</td>
 					{% else %}
-						<td><a href="{{ url_for('posts.post', slug = post.slug) }}">{{ post.title | truncate(50)}}</a></td>
-						{%endif%}
-						<td class="w-25 {%if not post.status%}posted-baned{%endif%}">{{ post.content | truncate(100)}}</td>
-						<td><a href="{{ url_for('admin.show_user', id = post.author.id ) }}">{{ post.author.email }}</a></td>
-						<td>{{ post.date_register.strftime('%X %d-%h-%Y') }}</td>
-					<td class="post-flags {%if post.status %}text-success{% else %}text-danger{% endif %}" id="flag-{{ post.id }}">
-				{%if post.status %}Publicado{% else %}Suspendido{% endif %}
-			</td>
-			<td>
-			<button id="ban_post_{{ post.id }}" class="{%if post.status %}btn-sm btn btn-danger{% else %}btn-sm btn btn-success{% endif %}">
-		{%if post.status %}Suspender{% else %}Dar Alta{% endif %}
-		</button>
-	</td>
-	<script>
-			$(function () {
-				$('#ban_post_{{ post.id }}').click(function(event) {
-					event.preventDefault();
-					$.getJSON("{{ url_for('admin.ban', id = post.id) }}", function(data) {
-						if(data.status === false){
-							let e =`<button id="ban_post_{{ post.id }}" type="submit" class="btn-sm btn btn-success">Dar Alta</button>`;
-							let flag =`<td class="post-flags text-danger" id="flag">Suspendido</td>`;
-							$('#ban_post_{{ post.id }}').replaceWith(e);
-							$('#flag-{{ post.id }}').replaceWith(flag);
-						}
-						else if (data.status === true){
-							let e =`<button id="ban_post_{{ post.id }}" type="submit" class="btn-sm btn btn-danger">Suspender</button>`;
-							let flag =`<td class="post-flags text-success" id="flag">Publicado</td>`;
-							$('#ban_post_{{ post.id }}').replaceWith(e);
-							$('#flag-{{ post.id }}').replaceWith(flag);
-						}
-					});
-				});
-			});
-	</script>
-	<tr>
-	{% endfor %}
-{% endif %}
-</tbody>
-</table>
+					<td><a href="{{ url_for('posts.post_show', slug = post.slug) }}" class="post_{{ post.slug }}">{{ post.title |
+							truncate(50)}}</a>
+					</td>
+					{%endif%}
+					<td class="post_cont-{{ post.slug }} w-25 {%if not post.publishied%}posted-baned{%endif%}">{{ post.content |
+						truncate(100)}}</td>
+					<td><a href="{{ url_for('admin.show_user', user_id = post.author.id ) }}">{{ post.author.email }}</a></td>
+					<td>{{ momentjs(post.date_register).formatNow()}}</td>
+					<td class="post-flags {%if post.publishied %}text-success{% else %}text-danger{% endif %}"
+						id="flag-{{ post.id }}">
+						{%if post.publishied %}Publicado{% else %}Suspendido{% endif %}
+					</td>
+					<td>
+						<button id="ban_post_{{ post.id }}"
+							class="{%if post.publishied %}btn-sm btn btn-danger{% else %}btn-sm btn btn-success{% endif %}">
+							{%if post.publishied %}Suspender{% else %}Dar Alta{% endif %}
+						</button>
+					</td>
+					<script>
+						$(function () {
+							$('#ban_post_{{ post.id }}').click(function (event) {
+								event.preventDefault();
+								$.getJSON("{{ url_for('admin.ban_post', post_id = post.id) }}", function (data) {
+									if (data.publishied === false) {
+										let e = `<button id="ban_post_{{ post.id }}" type="submit" class="btn-sm btn btn-success">Dar Alta</button>`;
+										let flag = `<td class="post-flags text-danger" id="flag">Suspendido</td>`;
+										$(".post_{{ post.slug }}").parent().parent().addClass('posted-baned-bg')
+										$(".post_{{ post.slug }},.post_cont-{{ post.slug }}").addClass('posted-baned')
+										$('#ban_post_{{ post.id }}').replaceWith(e);
+										$('#flag-{{ post.id }}').replaceWith(flag);
+									}
+									else if (data.publishied === true) {
+										let e = `<button id="ban_post_{{ post.id }}" type="submit" class="btn-sm btn btn-danger">Suspender</button>`;
+										let flag = `<td class="post-flags text-success" id="flag">Publicado</td>`;
+										$(".post_{{ post.slug }}").parent().parent().removeClass('posted-baned-bg')
+										$(".post_{{ post.slug }},.post_cont-{{ post.slug }}").removeClass('posted-baned')
+										$('#ban_post_{{ post.id }}').replaceWith(e);
+										$('#flag-{{ post.id }}').replaceWith(flag);
+									}
+								});
+							});
+						});
+					</script>
+				<tr>
+					{% endfor %}
+			</tbody>
+		</table>
+	</div>
 </div>
 {% endblock %}

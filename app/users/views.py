@@ -11,12 +11,26 @@ from flask import (
     session,
     current_app
 )
-from flask_login import current_user, login_user, logout_user, login_required
-from .forms import RegisterForm, LoginForm, AccountForm
+
+from flask_login import (
+    current_user,
+    login_user,
+    logout_user,
+    login_required
+)
+
+from .forms import (
+    RegisterForm,
+    LoginForm,
+    AccountForm,
+    EmailResetPasswordForm,
+    ResetPasswordForm
+)
+
 from ..decorators import permission_required
 from ..utils import save_upload
-from ..models import User, db, Permission
-from ..mail import send_token_confirmation
+from ..models import User, db, Permission, Post
+from ..mail import send_token_confirmation, send_token_reset_password
 from ..main.forms import SendEmailForm
 from . import users
 
@@ -35,7 +49,7 @@ def before_request():
 def uncorfirmed():
     if current_user.is_anonymous or current_user.confirmed:
         return redirect(url_for('main.home'))
-    return render_template('users/unconfirmed.html', title="Inconfirmado")
+    return render_template('users/unconfirmed.html', title="Cuenta no confirmada")
 
 
 @users.route('/register', methods=['GET', 'POST'])
@@ -54,7 +68,7 @@ def register():
         flash(f'Te hemos enviado un mensaje de confirmación de cuenta a tu correo.', 'info')
         return redirect(url_for('main.home'))
 
-    return render_template('users/register.jinja', form=form, title='Registrarse')
+    return render_template('users/register.html', form=form, title='Registrarse')
 
 
 @users.route('/login', methods=['GET', 'POST'])
@@ -73,7 +87,7 @@ def login():
         else:
             flash('Por favor vuelva a Ingresar su nombre de usuario y su contraseña correctamente, Gracias.', 'danger')
 
-    return render_template('users/login.html', title='Ingresar', form=form)
+    return render_template('users/login.html', title='Iniciar Sesión', form=form)
 
 
 @users.route('/logout')
@@ -81,17 +95,20 @@ def login():
 def logout():
     if 'username' in session:
         session.pop('username')
-    flash('Cerraste tu Sesión', 'warning')
+    flash('Cerraste tu Sesión', 'success')
     logout_user()
-    return redirect(url_for('.login'))
+    return redirect(url_for('main.home'))
 
 
 @users.route('/auth/<slug>', methods=['GET'])
 @users.route('/auth/<int:id>', methods=['GET'])
-def show(slug=None):
+def show(slug: str = None):
     form_email = SendEmailForm()
     user = User.query.filter_by(slug=slug).first()
-    return render_template('users/show.html', title=user.username, user=user, form_email=form_email)
+    posts = Post.query.filter_by(author=user).order_by(
+        Post.date_register.desc())
+
+    return render_template('users/show.html', title=user.username, user=user, posts=posts, form_email=form_email)
 
 
 @users.route('/account/<slug>', methods=['POST', 'GET'])
@@ -111,7 +128,7 @@ def account(slug=None, id=None):
                 os.remove(image_current_del)
 
             # Actualizar el nuevo file subido(en este caso hizo un update el cliente)
-            img = save_upload(form.upload.data, 'users', 300)
+            img = save_upload(form.upload.data, 'users')
 
             # Se asigna como nuevo upload al current user
             current_user.upload = img
@@ -138,7 +155,7 @@ def account(slug=None, id=None):
 @users.route('/follow/<slug>', methods=['GET'])
 @login_required
 @permission_required(Permission.FOLLOW)
-def follow(slug):
+def follow(slug: str):
     user = User.query.filter_by(slug=slug).first()
     if current_user.is_authenticated:
         current_user.follow(user)
@@ -148,7 +165,7 @@ def follow(slug):
 @users.route('/unfollow/<slug>', methods=['GET'])
 @login_required
 @permission_required(Permission.FOLLOW)
-def unfollow(slug):
+def unfollow(slug: str):
     user = User.query.filter_by(slug=slug).first()
     if current_user.is_authenticated:
         current_user.unfollow(user)
@@ -175,3 +192,32 @@ def resend_cofirmation():
     asyncio.run(send_token_confirmation(current_user, token))
     flash('Se le envio a su correo un mensaje de confimación de cuenta', 'success')
     return redirect(url_for('main.home'))
+
+
+@users.route('/reset-password', methods=['POST', 'GET'])
+def send_token_reset_pass():
+    email_form = EmailResetPasswordForm()
+
+    if email_form.validate_on_submit():
+        user = User.query.filter_by(email=email_form.email.data).first()
+        token = user.get_reset_token()
+        asyncio.run(send_token_reset_password(user, token))
+        flash('Revise su correo por favor, se le envio una dirección para reestablecer su contraseña', 'info')
+        return redirect(url_for('main.home'))
+
+    return render_template('users/reset_password/send_email.html', title='Recuperar contraseña', email_form=email_form)
+
+
+@users.route('/reset-password/<token>', methods=['POST', 'GET'])
+def reset_password(token: str):
+    form = ResetPasswordForm()
+    user = User.verificar_reset_token(token=token)
+
+    if user:
+        if form.validate_on_submit():
+            user.password = form.password.data
+            db.session.commit()
+            flash('Ah reestablecido su contrseña correctamente', 'success')
+            return redirect(url_for('users.login'))
+
+    return render_template('users/reset_password/reset.html', title="Reestablecer su contraseña", form=form)

@@ -6,6 +6,8 @@
 <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
 <script src="{{ url_for('static', filename='js/popper.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+<script src="{{ url_for('static', filename='js/moment.js') }}"></script>
+<script src="{{ url_for('static', filename='js/moment-with-locales.js') }}"></script>
 <script src="{{ url_for('static', filename='js/app/follow.js') }}"></script>
 {% block scripts %}{% endblock %}
 
@@ -14,4 +16,6 @@
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/perfil.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/post.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ url_for('static', filename = 'css/main.css') }}" type="text/css">
-<title>{%if title %}{{ APP_NAME }} | {{ title }}{% else %}{{ APP_NAME }}{%endif%}</title>
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+  integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+<title>{%if title %}{{ title }}{% else %}{{ APP_NAME }}{%endif%}</title>

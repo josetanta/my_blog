@@ -1,26 +1,30 @@
 <!Doctype html>
 <html lang="es">
+
 <head>
   {% include "partials/_head.html" %}
 </head>
+
 <body>
-{% include "partials/_nav.html" %}
-<main role="main" class="py-4 container">
-  {% for category, message in get_flashed_messages(with_categories = True) %}
-  <div class="alert alert-{{category}} alert-dismissible fade show mt-3" role="alert">
-    {{ message }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  {% endfor %}
-  {% block contenido %}{% endblock %}
-</main>
+  {% include "partials/_nav.html" %}
+  <main role="main" class="py-4 container">
+    {% for category, message in get_flashed_messages(with_categories = True) %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show mt-3" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %}
+    {% block contenido %}{% endblock %}
+  </main>
 
-<footer class="text-center border-top mt-3">
-  <p>Blog | <a id="send_mail" href="#" data-toggle="modal" data-target="#sendEmail">jose.tanta.27@unsch.edu.pe</a></p>
-</footer>
+  <footer class="text-center border-top mt-3">
+    <p>{{ APP_NAME }} | <a id="send_mail" href="#" data-toggle="modal"
+        data-target="#sendEmail">jose.tanta.27@unsch.edu.pe</a></p>
+  </footer>
 
-{% include "partials/_email_form.html" %}
+  {% include "partials/_email_form.html" %}
 </body>
+
 </html>
