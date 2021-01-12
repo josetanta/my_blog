@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% from "_form_field.html" import form_field %}
+{% block contenido %}
+<div class="row justify-content-center">
+  <div class="col-7">
+    <h4>Ingrese su correo </h4>
+    <form method="POST" class="form-group">
+      {{ email_form.hidden_tag() }}
+      {{ form_field(email_form.email, class='form-control')}}
+      {{ email_form.submit(class="btn btn-outline-primary btn-block") }}
+    </form>
+    <a class="text-info text-decoration-none" href="{{ url_for('users.login') }}">Iniciar Sesión</a>
+  </div>
+</div>
+{% endblock %}

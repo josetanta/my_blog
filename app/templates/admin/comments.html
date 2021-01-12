@@ -1,32 +1,65 @@
 {% extends 'base.html' %}
 {% block contenido %}
-<div id="content">
-  <h2>Posts Publicados</h2>
-  <table class="table table-responsive table-hover">
-    <thead>
-      <tr class="text-info">
-        <th>Comentraios - ID</th>
-        <th>User</th>
-        <th>Post</th>
-        <th>Contenido</th>
-        <th>Publicado</th>
-        <th>Estado de Publicación</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for comment in comments %}
-      <tr>
-        <td>{{ comment.id }}</td>
-        <td>{{ comment.author.email }}</td>
-        <td>{{ comment.post.title }}</td>
-        <td>{{ comment.body | truncate(60)}}</td>
-        <td>{{ comment.timestamp }}</td>
-        <td class="text-{%if comment.publishied%}success{%else%}danger{%endif%}">
-          {%if comment.publishied%}Publicado{%else%}Restringido{%endif%}
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<div class="row">
+  <div class="col-2">{% include 'admin/_btn_group.html' %}</div>
+  <div class="col-10">
+    <h2>Posts Publicados</h2>
+    <table class="table table-responsive table-hover">
+      <thead>
+        <tr class="text-info">
+          <th>User</th>
+          <th>Post</th>
+          <th>Contenido</th>
+          <th>Publicado</th>
+          <th>Estado de Publicación</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for comment in comments %}
+        <tr id="comment_{{ comment.id}}" class="{%if not comment.publishied%}posted-baned-bg{%endif%}">
+          <td><a href="{{ url_for('admin.show_user', user_id=comment.author.id) }}">{{ comment.author.username }}</a>
+          </td>
+          <td>{{ comment.post.title }}</td>
+          <td>{{ comment.body | truncate(40)}}</td>
+          <td>{{ momentjs(comment.timestamp).formatNow() }}</td>
+          <td class="text-{%if comment.publishied%}success{%else%}danger{%endif%}">
+            {%if comment.publishied%}Publicado{% else %}Restringido{% endif %}
+          </td>
+          <td>
+            <button id="ban_comment_{{ comment.id }}"
+              class="{%if comment.publishied %}btn-sm btn btn-danger{% else %}btn-sm btn btn-success{% endif %}">
+              {%if comment.publishied %}Suspender{% else %}Dar Alta{% endif %}
+            </button>
+          </td>
+          <script>
+            $(function () {
+              $('#ban_comment_{{ comment.id }}').click(function (event) {
+                event.preventDefault();
+                $.getJSON("{{ url_for('admin.ban_comment', comment_id = comment.id) }}", function (data) {
+                  if (data.publishied === false) {
+                    let e = `<button id="ban_comment_{{ comment.id }}" type="submit" class="btn-sm btn btn-success">Dar Alta</button>`;
+                    let flag = `<td class="post-flags text-danger" id="flag">Suspendido</td>`;
+                    $(".comment_{{ comment.id }}").parent().parent().addClass('posted-baned-bg')
+                    $(".comment_{{ comment.id }},.comment_cont-{{ comment.id }}").addClass('posted-baned')
+                    $('#ban_comment_{{ comment.id }}').replaceWith(e);
+                    $('#flag-{{ comment.id }}').replaceWith(flag);
+                  }
+                  else if (data.publishied === true) {
+                    let e = `<button id="ban_comment_{{ comment.id }}" type="submit" class="btn-sm btn btn-danger">Suspender</button>`;
+                    let flag = `<td class="post-flags text-success" id="flag">Publicado</td>`;
+                    $(".comment_{{ comment.id }}").parent().parent().removeClass('posted-baned-bg')
+                    $(".comment_{{ comment.id }},.comment_cont-{{ comment.id }}").removeClass('posted-baned')
+                    $('#ban_comment_{{ comment.id }}').replaceWith(e);
+                    $('#flag-{{ comment.id }}').replaceWith(flag);
+                  }
+                });
+              });
+            });
+          </script>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock contenido %}

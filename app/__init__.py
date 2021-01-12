@@ -6,7 +6,8 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from flask_pagedown import PageDown
-
+from app.helpers import isActive, momentjs
+from app import utils
 
 csrf = CSRFProtect()
 db = SQLAlchemy()
@@ -25,6 +26,13 @@ def create_app(config_name):
                 )
     app.config.from_object(config.get(config_name))
     config[config_name].init_app(app)
+
+    # Variables goblas
+    app.jinja_env.globals['momentjs'] = momentjs
+    app.jinja_env.globals['isActive'] = isActive
+
+    app.jinja_env.globals['APP_NAME'] = os.getenv('APP_NAME')
+    app.jinja_env.globals['GITHUB'] = os.getenv('GITHUB')
 
     csrf.init_app(app)
     login_manager.init_app(app)

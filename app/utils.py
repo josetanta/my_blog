@@ -2,9 +2,11 @@ import os
 import secrets
 from PIL import Image
 from flask import current_app
+from jinja2 import Markup
+from datetime import datetime
 
 
-def save_upload(img, model='', size=350):
+def save_upload(img, model='', size=450) -> str:
     name_token_img = secrets.token_hex(12)
 
     _, b_img = os.path.splitext(img.filename)

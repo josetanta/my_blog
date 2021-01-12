@@ -34,7 +34,7 @@ def home():
     # Paginación de los objectos a renderizar
     page = request.args.get('page', 1, type=int)
 
-    posts = Post.query.filter_by(status=True) \
+    posts = Post.query.filter_by(publishied=True) \
         .order_by(Post.date_register.desc()) \
         .paginate(page=page, per_page=4)
 
@@ -43,7 +43,7 @@ def home():
     return template
 
 
-@ main.route('/send_message', methods=['POST'])
+@ main.route('/send-message', methods=['POST'])
 @ login_required
 def send_message():
     form_email = SendEmailForm()
@@ -53,7 +53,7 @@ def send_message():
         asyncio.run(send_email_admin(
             user, form_email.title.data, form_email.body.data))
         flash(f'Gracias por tu recomendación', 'success')
-        return redirect(url_for('.home'))
+        return redirect(url_for('main.home'))
 
 
 @ main.route('/about')

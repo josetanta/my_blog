@@ -10,7 +10,5 @@ from .handlers import *
 def inject_permissions():
     return dict(
         Permission=Permission,
-        APP_NAME=current_app.config['APP_NAME'],
-        GITHUB=current_app.config['GITHUB'],
         form_send=forms.SendEmailForm()
     )

@@ -16,6 +16,9 @@ class PostCreateForm(FlaskForm):
     pagedown = PageDownField('Contenido', validators=[DataRequired()])
     upload = FileField('Imagen', validators=[
         FileAllowed(ALLOWED_EXTENSIONS)])
+
+    url_image = StringField('Url de Image')
+
     submit = SubmitField('Publicar Post')
 
     def validate_title(self, title):
@@ -34,5 +37,6 @@ class PostCreateForm(FlaskForm):
 
 
 class CommentForm(FlaskForm):
-    body = TextAreaField('Mi comentario', validators=[DataRequired()])
-    submit = SubmitField('Comentar')
+    body = TextAreaField('Comentar', validators=[DataRequired(), Length(
+        min=20, message='Por favor el comentario debe tener más de 20 caracteres.')])
+    submit = SubmitField('Publicar')
