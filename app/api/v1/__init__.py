@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-v1 = Blueprint('v1',__name__)
+v1 = Blueprint('v1', __name__)
 
-from . import users, posts
+from . import users, posts, comments

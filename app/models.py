@@ -1,4 +1,5 @@
 import bleach
+from flask import url_for
 from markdown import markdown
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_login import UserMixin, AnonymousUserMixin
@@ -142,10 +143,14 @@ class User(UserMixin, db.Model):
         return slugify(username)
 
     def to_json(self):
-        return jsonify(dict({
-            'user_id': self.id,
-            'username': self.username
-        }))
+        return dict({
+            'username': self.username,
+            'image': self.upload_path
+        })
+
+    @property
+    def upload_path(self):
+        return url_for('static', filename='uploads/users/' + self.upload)
 
     def api_to_json(self):
         return dict({
@@ -153,6 +158,8 @@ class User(UserMixin, db.Model):
             'address': self.address,
             'status': self.status,
             'upload': self.upload,
+            'self': url_for('v1.user_api', user_id=self.id, _external=True),
+            'image': self.upload_path,
             'posts': [post.to_json() for post in self.posts],
         })
 
@@ -179,10 +186,6 @@ class User(UserMixin, db.Model):
     @property
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
-
-    @property
-    def upload_path(self):
-        return url_for('static', filename='uploads/users/' + self.upload)
 
     # Generate a token for confimed of account user
     def generate_confirmed_token(self, expiration=3600):
@@ -299,9 +302,12 @@ class Post(UserMixin, db.Model):
     def to_json(self):
         obj = dict({
             'title': self.title,
+            'author': self.author.to_json(),
             'content': self.content,
             'publishied': self.publishied,
-            'author': self.author.username,
+            'self': url_for('v1.post_api', post_id=self.id, _external=True),
+            'image': self.upload_path,
+            'created': self.date_register,
             'comments': [comment.to_json() for comment in self.comments]
         })
         return obj
@@ -330,7 +336,8 @@ class Comment(db.Model):
         return dict({
             'post': self.post.title,
             'body': self.body,
-            'author': self.author.username
+            'author': self.author.username,
+            'self': url_for('v1.comment_api', comment_id=self.id, _external=True)
         })
 
     def get_id(self):

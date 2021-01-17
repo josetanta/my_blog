@@ -1,8 +1,8 @@
 from flask import Blueprint, current_app
 from app.models import Permission
-from . import forms
 main = Blueprint('main', __name__)
 
+from . import forms
 from .views import *
 from .handlers import *
 

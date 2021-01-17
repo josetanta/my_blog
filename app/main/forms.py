@@ -4,7 +4,8 @@ from wtforms.validators import DataRequired, ValidationError, Length
 
 
 class SendEmailForm(FlaskForm):
-    title = StringField('title', validators=[DataRequired(), Length(min=5, max=11)])
+    title = StringField('title', validators=[
+                        DataRequired(), Length(min=5, max=11)])
     body = TextAreaField('body', validators=[DataRequired()])
     submit = SubmitField('Enviar mensaje')
 

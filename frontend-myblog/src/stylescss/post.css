@@ -1,0 +1,150 @@
+.post-show {
+  display: block;
+  padding: 0 3rem;
+  padding-bottom: 2rem;
+}
+
+.post-img {
+  width: auto;
+  line-height: 0;
+  border-style: hidden;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+@media (max-width: 700px) {
+  .post-img {
+    width: 70%;
+    line-height: 0;
+    border-style: hidden;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .post-img {
+    width: 40%;
+    line-height: 0;
+    border-style: hidden;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .post-img {
+    width: 30%;
+    line-height: 0;
+    border-style: hidden;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+#post-public {
+  margin: 10px;
+  padding: 10px;
+}
+
+.post-content {
+  display: inline;
+  justify-content: space-between;
+}
+
+.image-account-post {
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+  display: inline-table;
+}
+.post-author-username {
+  margin-left: 10px;
+  display: inline-table;
+}
+
+.text-font-size {
+  font-size: 17px;
+}
+.post-content {
+  line-height: 1.5em;
+  max-width: 40%;
+}
+
+.post-flags {
+  font-weight: bolder;
+}
+
+.h {
+  height: 16rem;
+}
+
+.text-teal {
+  color: #20c991;
+}
+
+.followers {
+  display: block;
+  width: 7rem;
+  color: rgba(200, 143, 200, 0.9);
+}
+
+.followeds {
+  display: block;
+  width: 7rem;
+  color: rgba(100, 143, 100, 0.9);
+}
+
+.post-ban {
+  outline: blue;
+}
+.post-title-ban {
+  text-decoration: line-through;
+}
+
+.post-ban-body {
+  font-style: italic;
+  color: tomato;
+}
+
+.posted-baned {
+  text-decoration: line-through;
+}
+
+.posted-baned-bg {
+  background: rgba(200, 42, 23, 0.2);
+}
+
+.comment-img-author {
+  width: 28px;
+  height: 28px;
+}
+
+.vl {
+  border-left: 1px solid #c0afce;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+
+@media (max-width: 600px) {
+  #comments {
+    display: table;
+  }
+}
+
+@media (max-width: 700px) {
+  #comments {
+    display: table;
+  }
+}
+
+@media (max-width: 800px) {
+  #comments {
+    display: table;
+  }
+}

@@ -1,7 +1,6 @@
 from flask import jsonify, request
 from app import db
 from werkzeug.security import generate_password_hash
-from app.decorators import permission_api
 from flask_login import login_required
 from flask.views import MethodView
 from . import v1
@@ -9,8 +8,6 @@ from app.models import User
 
 
 class UserAPI(MethodView):
-
-    decorators = [permission_api]
 
     def get(self, user_id):
         if user_id is None:
@@ -51,7 +48,7 @@ class UserAPI(MethodView):
 
 user_view = UserAPI.as_view('user_api')
 v1.add_url_rule(
-    '/users/', defaults={'user_id': None}, view_func=user_view, methods=['GET', ])
-v1.add_url_rule('/users/', view_func=user_view, methods=['POST'])
+    '/users', defaults={'user_id': None}, view_func=user_view, methods=['GET', ])
+v1.add_url_rule('/users', view_func=user_view, methods=['POST'])
 v1.add_url_rule('/users/<int:user_id>', view_func=user_view,
                 methods=['GET', 'PUT', 'PATCH', 'DELETE'])

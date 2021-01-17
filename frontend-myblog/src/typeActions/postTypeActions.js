@@ -1,0 +1,3 @@
+export const POSTS_LIST_REQUEST = "[Post] POSTS_LIST_REQUEST";
+export const POSTS_LIST_SUCCESS = "[Post] POSTS_LIST_SUCCESS";
+export const POSTS_LIST_FAIL = "[Post] POSTS_LIST_FAIL";

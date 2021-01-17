@@ -1,13 +1,11 @@
 from ... import db
 from flask import jsonify, request
 from flask.views import MethodView
-from ...decorators import permission_api
 from . import v1
 from ...models import Post
 
 
 class PostAPI(MethodView):
-    decorators = [permission_api]
 
     def get(self, post_id):
 
@@ -43,7 +41,7 @@ class PostAPI(MethodView):
 
 post_view = PostAPI.as_view('post_api')
 v1.add_url_rule(
-    '/posts/', defaults={'post_id': None}, view_func=post_view, methods=['GET'])
-v1.add_url_rule('/posts/', view_func=post_view, methods=['POST'])
+    '/posts', defaults={'post_id': None}, view_func=post_view, methods=['GET'])
+v1.add_url_rule('/posts', view_func=post_view, methods=['POST'])
 v1.add_url_rule('/posts/<int:post_id>', view_func=post_view,
                 methods=['GET', 'PUT', 'DELETE', 'PATCH'])
