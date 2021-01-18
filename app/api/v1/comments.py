@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, current_app, url_for
 from app import db
 from werkzeug.security import generate_password_hash
 from flask_login import login_required
@@ -9,13 +9,22 @@ from app.models import Comment
 
 class CommentAPI(MethodView):
 
-    def get(self, comment_id: int):
+    def get(self, comment_id = None):
         if comment_id is None:
-            comments = Comment.query.all()
-            return jsonify([comment.to_json() for comment in comments])
+            page = request.args.get('page',1 , type = int)
+            pagination = Comment.query.paginate(page, per_page = current_app.config['APP_PER_PAGE'], error_out = False)
+            comments = pagination.items
+            prev=None
+            if pagination.has_prev:
+                prev = url_for('v1.comment_api', page=page-1, _external=True)
+            next=None
+            if pagination.has_next:
+                next = url_for('v1.comment_api', page=page+1, _external=True)
+
+            return jsonify({'comments':[comment.to_json() for comment in comments],'next':next,'prev':prev,'count':pagination.total})
         else:
             comment = Comment.query.get_or_404(int(comment_id))
-            return jsonify(comment.to_json())
+            return jsonify({ 'comment':comment.to_json() })
 
     def post(self):
         comment = Comment(
@@ -42,7 +51,6 @@ class CommentAPI(MethodView):
         db.session.commit()
 
         return jsonify(comment.to_json())
-
 
 comment_view = CommentAPI.as_view('comment_api')
 v1.add_url_rule('/comments', defaults={'comment_id': None},

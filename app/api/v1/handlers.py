@@ -1,3 +1,4 @@
+from flask import jsonify
 from . import v1
 
 
@@ -6,9 +7,10 @@ def get_404(e):
     return e, 404
 
 
-@v1.app_errorhandler(403)
-def get_403(e):
-    return e, 403
+def forbidden(message):
+    response = jsonify({'error':'forbidden','message':message})
+    response.status = 403
+    return response
 
 
 @v1.app_errorhandler(405)

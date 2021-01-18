@@ -153,15 +153,27 @@ class User(UserMixin, db.Model):
         return url_for('static', filename='uploads/users/' + self.upload)
 
     def api_to_json(self):
-        return dict({
-            'username': self.username,
-            'address': self.address,
-            'status': self.status,
-            'upload': self.upload,
-            'self': url_for('v1.user_api', user_id=self.id, _external=True),
-            'image': self.upload_path,
-            'posts': [post.to_json() for post in self.posts],
-        })
+        return {
+            'data': {
+                'username': self.username,
+                'address': self.address,
+                'status': self.status,
+                'email': self.email,
+                'upload': self.upload,
+                'slug': self.slug,
+                'image': self.upload_path,
+            },
+            'urls':{
+                'self': url_for('v1.user_api', user_id=self.id, _external=True),
+                'posts': url_for('v1.user_posts',user_id=self.id, _external=True),
+                'comments': url_for('v1.user_comments',user_id=self.id, _external=True),
+            },
+            'paths':{
+                'self': url_for('v1.user_api', user_id=self.id),
+                'posts': url_for('v1.user_posts',user_id=self.id),
+                'comments': url_for('v1.user_comments',user_id=self.id),
+            }
+        }
 
     def follow(self, user):
         if not self.is_following(user):
@@ -300,17 +312,27 @@ class Post(UserMixin, db.Model):
         return url_for('static', filename='uploads/posts/' + self.upload)
 
     def to_json(self):
-        obj = dict({
-            'title': self.title,
-            'author': self.author.to_json(),
-            'content': self.content,
-            'publishied': self.publishied,
-            'self': url_for('v1.post_api', post_id=self.id, _external=True),
-            'image': self.upload_path,
-            'created': self.date_register,
-            'comments': [comment.to_json() for comment in self.comments]
-        })
-        return obj
+        return {
+            'data': {
+                'title': self.title,
+                'content': self.content,
+                'content_html': self.content_html,
+                'publishied': self.publishied,
+                'slug': self.slug,
+                'image': self.upload_path,
+                'created': self.date_register,
+            },
+            'urls':{
+                'self': url_for('v1.post_api', post_id=self.id, _external=True),
+                'comments': url_for('v1.post_comments', post_id=self.id, _external=True),
+                'user': url_for('v1.user_api', user_id = self.user_id,_external=True)
+            },
+            'paths':{
+                'self': url_for('v1.post_api', post_id=self.id),
+                'comments': url_for('v1.post_comments', post_id=self.id),
+                'user': url_for('v1.user_api', user_id = self.user_id)
+            }
+        }
 
     def get_id(self):
         obj = dict({
@@ -333,12 +355,22 @@ class Comment(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_json(self):
-        return dict({
-            'post': self.post.title,
-            'body': self.body,
-            'author': self.author.username,
-            'self': url_for('v1.comment_api', comment_id=self.id, _external=True)
-        })
+        return {
+            'data': {
+                'content': self.body,
+                'created': self.timestamp,
+            },
+            'urls': {
+                'self': url_for('v1.comment_api', comment_id=self.id, _external=True),
+                'post': url_for('v1.post_api', post_id=self.post_id, _external=True),
+                'user': url_for('v1.user_api', user_id=self.user_id, _external=True)
+            },
+            'paths': {
+                'self': url_for('v1.comment_api', comment_id=self.id),
+                'post': url_for('v1.post_api', post_id=self.post_id),
+                'user': url_for('v1.user_api', user_id=self.user_id)
+            }
+        }
 
     def get_id(self):
         obj = dict({
