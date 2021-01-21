@@ -1,50 +1,60 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { userDetailsAction } from "../actions/userActions";
-import ImageUser from "./ImageUser";
 
-export default function Post({ post: { data, paths } }) {
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { userDetailsWithPathAction } from "../actions/userActions";
+
+// Components
+import ImageUser from "./ImageUser";
+import ImagePost from "./ImagePost";
+
+export default function Post({
+  post: { data, paths },
+  linkMoreInfoStatus,
+  truncateText,
+}) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.userDetails);
   useEffect(() => {
-    dispatch(userDetailsAction(paths.user));
+    dispatch(userDetailsWithPathAction(paths.user));
   }, [dispatch, data, paths]);
 
   return (
     <div className="post-show my-2">
-      <legend>
-        <h3>
-          <Link
-            className="text-info text-decoration-none"
-            to={"/post/" + data.slug}
-          >
-            {data.title}
-          </Link>
-        </h3>
-      </legend>
-      <div id="post-public">
-        <img className="post-img" alt="Imagen del Post" src={data.image} />
-        <div className="post-content">
-          <p className="text-justify text-break">{data.content}</p>
-          <a className="text-primary" href="/">
-            Más informacion aquí <i className="fad fa-external-link" />
-          </a>
-          <p className="text-muted">Publicado: {data.created} </p>
-        </div>
+      <div className="post-content">
+        <Link
+          className="text-info text-decoration-none"
+          to={"/post/" + data.slug}
+        >
+          <h3>{data.title}</h3>
 
-        <div className="meta-data">
-          <Link to={"/user"} className="text-success text-decoration-none">
-            {user && (
-              <ImageUser
-                classes={"image-account-post"}
-                image={user.data.image}
-              />
-            )}
-            {"  "}
-            <b>{user && user.data.username}</b>
+          <ImagePost classes="post-img" alt="Imagen del Post" postData={data} />
+        </Link>
+        {(!truncateText && (
+          <p className="my-2 text-justify text-break">{data.content}</p>
+        )) || (
+          <p className="my-2 text-justify text-break">
+            {data.content.slice(0, data.content.length / 4)} ...
+          </p>
+        )}
+
+        {linkMoreInfoStatus && (
+          <Link className="text-primary" to={"/post/" + data.slug}>
+            Más informacion aquí <i className="fad fa-external-link" />
           </Link>
-        </div>
+        )}
+
+        <p className="text-muted">Publicado: {data.created} </p>
+      </div>
+      <div className="meta-data">
+        {user && (
+          <ImageUser
+            classes={"mr-3 image-account-post"}
+            userData={user.data}
+            showLink={true}
+          />
+        )}
       </div>
     </div>
   );

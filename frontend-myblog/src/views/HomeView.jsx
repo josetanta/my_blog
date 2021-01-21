@@ -4,6 +4,7 @@ import Post from "../components/Post";
 // React-Reveal
 import Fade from "react-reveal/Fade";
 import { Fragment } from "react";
+import Page from "../components/Page";
 
 export default function HomeView({ loading, error, data }) {
   return (
@@ -18,10 +19,11 @@ export default function HomeView({ loading, error, data }) {
             {data.posts &&
               data.posts.map((post, index) => (
                 <div key={index}>
-                  <Post post={post} />
+                  <Post post={post} linkMoreInfoStatus={true} truncateText />
                 </div>
               ))}
           </div>
+          <Page />
         </Fade>
       )}
     </Fragment>

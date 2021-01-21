@@ -162,16 +162,18 @@ class User(UserMixin, db.Model):
                 'upload': self.upload,
                 'slug': self.slug,
                 'image': self.upload_path,
+                'followers': self.followers.count(),
+                'followeds': self.followed.count(),
             },
-            'urls':{
+            'urls': {
                 'self': url_for('v1.user_api', user_id=self.id, _external=True),
-                'posts': url_for('v1.user_posts',user_id=self.id, _external=True),
-                'comments': url_for('v1.user_comments',user_id=self.id, _external=True),
+                'posts': url_for('v1.user_posts', user_id=self.id, _external=True),
+                'comments': url_for('v1.user_comments', user_id=self.id, _external=True),
             },
-            'paths':{
+            'paths': {
                 'self': url_for('v1.user_api', user_id=self.id),
-                'posts': url_for('v1.user_posts',user_id=self.id),
-                'comments': url_for('v1.user_comments',user_id=self.id),
+                'posts': url_for('v1.user_posts', user_id=self.id),
+                'comments': url_for('v1.user_comments', user_id=self.id),
             }
         }
 
@@ -322,15 +324,15 @@ class Post(UserMixin, db.Model):
                 'image': self.upload_path,
                 'created': self.date_register,
             },
-            'urls':{
+            'urls': {
                 'self': url_for('v1.post_api', post_id=self.id, _external=True),
                 'comments': url_for('v1.post_comments', post_id=self.id, _external=True),
-                'user': url_for('v1.user_api', user_id = self.user_id,_external=True)
+                'user': url_for('v1.user_api', user_id=self.user_id, _external=True)
             },
-            'paths':{
+            'paths': {
                 'self': url_for('v1.post_api', post_id=self.id),
                 'comments': url_for('v1.post_comments', post_id=self.id),
-                'user': url_for('v1.user_api', user_id = self.user_id)
+                'user': url_for('v1.user_api', user_id=self.user_id)
             }
         }
 

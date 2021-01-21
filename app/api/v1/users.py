@@ -9,11 +9,12 @@ from app.models import User, Post, Comment
 
 class UserAPI(MethodView):
 
-    def get(self, user_id:int = None):
+    def get(self, user_id: int = None, slug=None):
         if user_id is None:
-            return jsonify({'users':[user.api_to_json() for user in User.query.all()]})
+            return jsonify({'users': [user.api_to_json() for user in User.query.all()]})
+
         else:
-            return jsonify({'user':User.query.get_or_404(int(user_id)).api_to_json()})
+            return jsonify({'user': User.query.get_or_404(int(user_id)).api_to_json()})
 
     def post(self):
         user = User(
@@ -51,37 +52,49 @@ v1.add_url_rule('/users/<int:user_id>', view_func=user_view,
                 methods=['GET', 'PUT', 'PATCH', 'DELETE'])
 
 
-@v1.route('/users/<slug>/posts',methods=['GET',])
-@v1.route('/users/<user_id>/posts',methods=['GET',])
-def user_posts(user_id = None, slug=None):
-    page = request.args.get('page',1,type=int)
-    pagination = Post.query.filter_by(user_id = user_id).paginate(page, per_page = current_app.config['APP_PER_PAGE'], error_out=False)
+@v1.route("/users/<slug>", methods=['GET'])
+def get_user_for_slug(slug=None):
+    return jsonify({'user': User.query.filter_by(slug=slug).first().api_to_json()})
+
+
+@v1.route('/users/<user_id>/posts', methods=['GET', ])
+def user_posts(user_id=None, slug=None):
+    page = request.args.get('page', 1, type=int)
+    pagination = Post.query.filter_by(user_id=user_id).paginate(
+        page, per_page=current_app.config['APP_PER_PAGE'], error_out=False)
     posts = pagination.items
 
     prev = None
     if prev:
-        prev = url_for('v1.user_posts', user_id = user_id, page = page-1, _external=True)
+        prev = url_for('v1.user_posts', user_id=user_id,
+                       page=page-1, _external=True)
 
     next = None
     if next:
-        next = url_for('v1.user_posts', user_id = user_id, page = page+1, _external = True)
+        next = url_for('v1.user_posts', user_id=user_id,
+                       page=page+1, _external=True)
 
-    return jsonify({'posts':[post.to_json() for post in posts],'prev':prev, 'next':next, 'count':pagination.total})
+    return jsonify({'posts': [post.to_json() for post in posts], 'prev': prev, 'next': next, 'count': pagination.total})
 
 
-@v1.route('/users/<slug>/comments',methods=['GET',])
-@v1.route('/users/<user_id>/comments',methods=['GET',])
-def user_comments(user_id = None, slug=None):
-    page = request.args.get('page',1,type=int)
-    pagination = Comment.query.filter_by(user_id=user_id).paginate(page, per_page = current_app.config['APP_PER_PAGE'], error_out=False)
+@v1.route('/users/<int:user_id>/comments', methods=['GET', ])
+def user_comments(user_id=None, slug=None):
+    page = request.args.get('page', 1, type=int)
+    pagination = None
+
+    pagination = Comment.query.filter_by(user_id=user_id).paginate(
+        page, per_page=current_app.config['APP_PER_PAGE'], error_out=False)
+
     comments = pagination.items
 
-    prev=None
+    prev = None
     if prev:
-        prev = url_for('v1.user_comments',user_id=user_id, page=page-1, _external=True)
+        prev = url_for('v1.user_comments', user_id=user_id,
+                       page=page-1, _external=True)
 
-    next=None
+    next = None
     if next:
-        next = url_for('v1.user_comments',user_id=user_id, page=page+1, _external=True)
+        next = url_for('v1.user_comments', user_id=user_id,
+                       page=page+1, _external=True)
 
-    return jsonify({'comments':[comment.to_json() for comment in comments],'prev':prev,'next':next,'count':pagination.total})
+    return jsonify({'comments': [comment.to_json() for comment in comments], 'prev': prev, 'next': next, 'count': pagination.total})

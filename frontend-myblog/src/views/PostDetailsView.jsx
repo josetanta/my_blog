@@ -7,6 +7,7 @@ import { postDetailsAction } from "../actions/postActions";
 // Components
 import Comment from "../components/Comment";
 import Post from "../components/Post";
+import Fade from "react-reveal/Fade";
 
 export default function PostDetailsView(props) {
   const slug = props.match.params.slug;
@@ -27,17 +28,15 @@ export default function PostDetailsView(props) {
         ) : (
           post && (
             <Fragment>
-              <div className="col-md-7">
-                <Post post={{ data: post.data, paths: post.paths }} />
-              </div>
+              <Fade left>
+                <div className="col-md-7">
+                  <Post post={{ data: post.data, paths: post.paths }} />
+                </div>
+              </Fade>
               <div className="col-md-5">
                 <div className="ml-4">
                   <h4 className="text-info">Comentarios</h4>
-                  <button
-                    className="btn text-secondary"
-                    data-toggle="collapse"
-                    data-target="#collapseComment"
-                  >
+                  <button className="btn text-secondary">
                     <i className="fal fa-comments" />
                   </button>
                 </div>

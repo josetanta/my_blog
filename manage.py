@@ -55,5 +55,6 @@ def deploy():
     # create or update user roles
     Role.generate_roles()
 
+
 if __name__ == '__main__':
     manager.run()
