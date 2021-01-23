@@ -7,14 +7,14 @@ from . import v1
 from app.models import User, Post, Comment
 
 
-class UserAPI(MethodView):
+class UserAPIMethodView(MethodView):
 
     def get(self, user_id: int = None, slug=None):
         if user_id is None:
-            return jsonify({'users': [user.api_to_json() for user in User.query.all()]})
+            return jsonify({'data': [user.api_to_json() for user in User.query.all()]})
 
         else:
-            return jsonify({'user': User.query.get_or_404(int(user_id)).api_to_json()})
+            return jsonify({'data': User.query.get_or_404(int(user_id)).api_to_json()})
 
     def post(self):
         user = User(
@@ -44,7 +44,7 @@ class UserAPI(MethodView):
         return jsonify(user.api_to_json())
 
 
-user_view = UserAPI.as_view('user_api')
+user_view = UserAPIMethodView.as_view('user_api')
 v1.add_url_rule(
     '/users', defaults={'user_id': None}, view_func=user_view, methods=['GET', ])
 v1.add_url_rule('/users', view_func=user_view, methods=['POST'])
@@ -53,12 +53,12 @@ v1.add_url_rule('/users/<int:user_id>', view_func=user_view,
 
 
 @v1.route("/users/<slug>", methods=['GET'])
-def get_user_for_slug(slug=None):
-    return jsonify({'user': User.query.filter_by(slug=slug).first().api_to_json()})
+def user_for_slug(slug=None):
+    return jsonify({'data': User.query.filter_by(slug=slug).first().api_to_json()})
 
 
-@v1.route('/users/<user_id>/posts', methods=['GET', ])
-def user_posts(user_id=None, slug=None):
+@v1.route('/users/<int:user_id>/posts', methods=['GET', ])
+def user_posts(user_id: int = None):
     page = request.args.get('page', 1, type=int)
     pagination = Post.query.filter_by(user_id=user_id).paginate(
         page, per_page=current_app.config['APP_PER_PAGE'], error_out=False)
@@ -74,11 +74,40 @@ def user_posts(user_id=None, slug=None):
         next = url_for('v1.user_posts', user_id=user_id,
                        page=page+1, _external=True)
 
-    return jsonify({'posts': [post.to_json() for post in posts], 'prev': prev, 'next': next, 'count': pagination.total})
+    return jsonify({'data': [post.to_json() for post in posts], 'links': {'prev': prev, 'next': next}, 'count': pagination.total})
+
+
+@v1.route('/users/<slug>/posts', methods=['GET', ])
+def user_posts_slug(slug=None):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(slug=slug).first()
+    pagination = Post.query.filter_by(user_id=user.id).paginate(
+        page, per_page=current_app.config['APP_PER_PAGE'], error_out=False)
+    posts = pagination.items
+
+    prev = None
+    if prev:
+        prev = url_for('v1.user_posts_slug', slug=slug,
+                       page=page-1, _external=True)
+
+    next = None
+    if next:
+        next = url_for('v1.user_posts_slug', slug=slug,
+                       page=page+1, _external=True)
+
+    return jsonify({'data': [post.to_json() for post in posts], 'links': {'prev': prev, 'next': next}, 'count': pagination.total})
+
+
+@v1.route('/users/<int:user_id>/posts/<int:post_id>', methods=['GET', ])
+def user_post(user_id=None, post_id=None):
+
+    post = Post.query.filter_by(user_id=user_id).first()
+
+    return jsonify({'data': post.to_json()})
 
 
 @v1.route('/users/<int:user_id>/comments', methods=['GET', ])
-def user_comments(user_id=None, slug=None):
+def user_comments(user_id=None):
     page = request.args.get('page', 1, type=int)
     pagination = None
 
@@ -96,5 +125,11 @@ def user_comments(user_id=None, slug=None):
     if next:
         next = url_for('v1.user_comments', user_id=user_id,
                        page=page+1, _external=True)
+    return jsonify({'data': [comment.to_json() for comment in comments], 'links': {'prev': prev, 'next': next}, 'count': pagination.total})
 
-    return jsonify({'comments': [comment.to_json() for comment in comments], 'prev': prev, 'next': next, 'count': pagination.total})
+
+@v1.route('/users/<int:user_id>/comments/<int:comment_id>', methods=['GET', ])
+def user_comment(user_id=None, comment_id=None):
+    comment = Comment.query.filter_by(user_id=user_id).first()
+
+    return jsonify({'data': comment.to_json()})

@@ -154,7 +154,9 @@ class User(UserMixin, db.Model):
 
     def api_to_json(self):
         return {
-            'data': {
+            'type': 'users',
+            'id': str(self.id),
+            'attributes': {
                 'username': self.username,
                 'address': self.address,
                 'status': self.status,
@@ -162,18 +164,25 @@ class User(UserMixin, db.Model):
                 'upload': self.upload,
                 'slug': self.slug,
                 'image': self.upload_path,
-                'followers': self.followers.count(),
-                'followeds': self.followed.count(),
+                'followers': str(self.followers.count()),
+                'followeds': str(self.followed.count()),
             },
-            'urls': {
+            'links': {
                 'self': url_for('v1.user_api', user_id=self.id, _external=True),
-                'posts': url_for('v1.user_posts', user_id=self.id, _external=True),
-                'comments': url_for('v1.user_comments', user_id=self.id, _external=True),
             },
-            'paths': {
-                'self': url_for('v1.user_api', user_id=self.id),
-                'posts': url_for('v1.user_posts', user_id=self.id),
-                'comments': url_for('v1.user_comments', user_id=self.id),
+            'relationships': {
+                'posts': {
+                    'data': [{'type': 'posts', 'id': str(post.id), 'slug': post.slug} for post in self.posts],
+                    'links': {
+                        'related': url_for('v1.user_posts', user_id=self.id, _external=True)
+                    }
+                },
+                'comments': {
+                    'data': [{'type': 'comments', 'id': str(comment.id)} for comment in self.comments],
+                    'links': {
+                        'related': url_for('v1.user_comments', user_id=self.id, _external=True)
+                    }
+                }
             }
         }
 
@@ -315,7 +324,9 @@ class Post(UserMixin, db.Model):
 
     def to_json(self):
         return {
-            'data': {
+            'type': 'posts',
+            'id': str(self.id),
+            'attributes': {
                 'title': self.title,
                 'content': self.content,
                 'content_html': self.content_html,
@@ -324,16 +335,31 @@ class Post(UserMixin, db.Model):
                 'image': self.upload_path,
                 'created': self.date_register,
             },
-            'urls': {
+            'links': {
                 'self': url_for('v1.post_api', post_id=self.id, _external=True),
-                'comments': url_for('v1.post_comments', post_id=self.id, _external=True),
-                'user': url_for('v1.user_api', user_id=self.user_id, _external=True)
             },
-            'paths': {
-                'self': url_for('v1.post_api', post_id=self.id),
-                'comments': url_for('v1.post_comments', post_id=self.id),
-                'user': url_for('v1.user_api', user_id=self.user_id)
+            'relationships': {
+                'users': {
+                    'data': {
+                        'type': 'users',
+                        'id': str(self.author.id),
+                        'slug': self.author.slug,
+                        'username': self.author.username,
+                        'image': self.author.upload_path
+                    },
+                    'links': {
+                        'related':  url_for('v1.user_api', user_id=self.user_id, _external=True),
+                        'self': url_for('v1.user_post', user_id=self.author.id, post_id=self.id, _external=True)
+                    }
+                },
+                'comments': {
+                    'data': [{'type': 'comments', 'id': str(comment.id)} for comment in self.comments],
+                    'links': {
+                        'related': url_for('v1.post_comments', post_id=self.id, _external=True)
+                    }
+                }
             }
+
         }
 
     def get_id(self):
@@ -358,19 +384,40 @@ class Comment(db.Model):
 
     def to_json(self):
         return {
-            'data': {
+            'type': 'comments',
+            'id': str(self.id),
+            'attributes': {
                 'content': self.body,
                 'created': self.timestamp,
             },
-            'urls': {
+            'links': {
                 'self': url_for('v1.comment_api', comment_id=self.id, _external=True),
-                'post': url_for('v1.post_api', post_id=self.post_id, _external=True),
-                'user': url_for('v1.user_api', user_id=self.user_id, _external=True)
             },
-            'paths': {
-                'self': url_for('v1.comment_api', comment_id=self.id),
-                'post': url_for('v1.post_api', post_id=self.post_id),
-                'user': url_for('v1.user_api', user_id=self.user_id)
+            'relationships': {
+                'users': {
+                    'data': {
+                        'type': 'users',
+                        'id': str(self.author.id),
+                        'slug': self.author.slug,
+                        'username': self.author.username,
+                        'image': self.author.upload_path
+                    },
+                    'links': {
+                        'related': url_for('v1.user_api', user_id=self.user_id, _external=True),
+                        'self': url_for('v1.user_comment', comment_id=self.id, user_id=self.user_id, _external=True)
+                    }
+                },
+                'posts': {
+                    'data': {
+                        'type': 'posts',
+                        'id': str(self.post.id),
+                        'slug': self.post.slug
+                    },
+                    'links': {
+                        'related': url_for('v1.post_api', post_id=self.post_id, _external=True),
+                        'self': url_for('v1.post_comment', comment_id=self.id, post_id=self.post_id, _external=True),
+                    }
+                }
             }
         }
 

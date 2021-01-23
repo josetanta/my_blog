@@ -7,30 +7,31 @@ from . import v1
 from app.models import Comment
 
 
-class CommentAPI(MethodView):
+class CommentAPIMethodView(MethodView):
 
-    def get(self, comment_id = None):
+    def get(self, comment_id=None):
         if comment_id is None:
-            page = request.args.get('page',1 , type = int)
-            pagination = Comment.query.paginate(page, per_page = current_app.config['APP_PER_PAGE'], error_out = False)
+            page = request.args.get('page', 1, type=int)
+            pagination = Comment.query.paginate(
+                page, per_page=current_app.config['APP_PER_PAGE'], error_out=False)
             comments = pagination.items
-            prev=None
+            prev = None
             if pagination.has_prev:
                 prev = url_for('v1.comment_api', page=page-1, _external=True)
-            next=None
+            next = None
             if pagination.has_next:
                 next = url_for('v1.comment_api', page=page+1, _external=True)
 
-            return jsonify({'comments':[comment.to_json() for comment in comments],'next':next,'prev':prev,'count':pagination.total})
+            return jsonify({'data': [comment.to_json() for comment in comments], 'links': {'next': next, 'prev': prev, 'self': url_for('v1.comment_api', _external=True)}, 'count': pagination.total})
         else:
             comment = Comment.query.get_or_404(int(comment_id))
-            return jsonify({ 'comment':comment.to_json() })
+            return jsonify({'data': comment.to_json()})
 
     def post(self):
         comment = Comment(
             body=request['body'],
             user_id=request['user_id'],
-            post_id=srequest['post_id'],
+            post_id=request['post_id'],
             publishied=request['publishied']
         )
 
@@ -52,7 +53,8 @@ class CommentAPI(MethodView):
 
         return jsonify(comment.to_json())
 
-comment_view = CommentAPI.as_view('comment_api')
+
+comment_view = CommentAPIMethodView.as_view('comment_api')
 v1.add_url_rule('/comments', defaults={'comment_id': None},
                 view_func=comment_view, methods=['GET', ])
 v1.add_url_rule('/comments', view_func=comment_view, methods=['POST'])
