@@ -24,15 +24,14 @@
 }
 
 .register-img {
-  max-width: 400px;
-  max-height: 400px;
+  width: auto;
 }
 
-/* @media screen and (min-width: 360px) {
+@media screen and (min-width: 360px) {
   .register-img {
     width: 100%;
   }
-} */
+}
 
 .contenedor {
   position: relative;
@@ -65,9 +64,4 @@
     transform: translate(-50%, -50%);
     font-size: 2px;
   }
-}
-
-.img-404 {
-  max-width: 100%;
-  max-height: 100%;
 }

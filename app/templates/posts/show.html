@@ -1,103 +1,90 @@
 {% extends 'base.html' %}
 {% from "_form_field.html" import form_field %}
 {% block contenido %}
-<div class="row">
-  <div class="col-md-7">
-    <fieldset class="post-show">
-      {% if post.author.upload|length > 1%}
-      <img class="image-account-post" src="{{ post.author.upload_path }}" alt="Foto de mi perfil">
-      {% endif %}
-      <span class="post-author-username text-info"><b>Autor: </b><a
-          href="{{ url_for('users.show', slug = post.author.slug ) }}" class="text-decoration-none">{{
-          post.author.username}}</a></span>
-      <p class="text-muted mt-1"><b>Publicado: </b><em>{{ momentjs(post.date_register).formatNow() }}</em></p>
-      <legend>
-        <h3 class="text-primary">{{post.title}}</h3>
-        {% if current_user == post.author %}
-        <button type="button" class="btn-sm btn btn-outline-success" data-toggle="modal" data-target="#updatePost"
-          data-whatever="@getbootstrap"><i class="fal fa-pencil"></i></button>
-        <button type="button" class="btn-sm btn btn-danger" data-toggle="modal" data-target="#postdelete"><i
-            class="fal fa-trash-alt"></i></button>
+  <div class="row">
+    <div class="col-md-8">
+      <fieldset class="post-show">
+        {% if post.author.upload %}
+          <img class="image-account-post" src="{{ post.author.upload_path }}" alt="Foto de mi perfil">
         {% endif %}
-      </legend>
-      {% if post.upload|length > 3 %}
-      <div class="d-flex justify-content-center">
-        <img class="post-img" src="{{ post.upload_path }}" alt="Imagen del Post">
-      </div>
-      {% elif post.url_image|length > 1 %}
-      <div class="d-flex justify-content-center">
-        <img class="post-img" src="{{ post.url_image }}" alt="Imagen del Post">
-      </div>
-      {% endif %}
-      <div class="post-content text-justify">
-        <p class="text-break">{{ post.content_html | safe }}</p>
-      </div>
-    </fieldset>
-  </div>
-  <div class="col-md-5">
-    {% if current_user.is_authenticated and current_user.can(Permission.COMMENT) %}
-    <div class="ml-4">
-      <h4 class="text-info">Comentarios</h4>
-      <button class="btn text-secondary" data-toggle="collapse" data-target="#collapseComment"><i
-          class="fal fa-comments"></i></button>
-      <div class="collapse" id="collapseComment">
-        <form class="my-1" action="{{ url_for('posts.comment', slug = post.slug)}}" method="POST">
-          {{ c_form.hidden_tag() }}
-          {% include "posts/_form_comment.html" %}
-        </form>
-      </div>
+        <span class="post-author-username text-info"><b>Autor: </b>{{ post.author.username}}</span>
+        <p class="text-muted mt-1"><b>Publicado: </b>{{post.date_register.strftime('%d ,%B %Y')}}</p>
+        <legend>
+          <h3 class="text-primary">{{post.title}}</h3>
+          {% if current_user == post.author %}
+            <button type="button" class="btn-sm btn btn-outline-success" data-toggle="modal" data-target="#updatePost" data-whatever="@getbootstrap">Actualizar mi Post</button>
+            <button type="button" class="btn-sm btn btn-danger" data-toggle="modal" data-target="#postdelete">Eliminar</button>
+          {% endif %}
+        </legend>
+        {% if post.upload %}
+          <img class="post-img" src="{{ post.upload_path }}" alt="Imagen del Post">
+        {% else %}
+        {% endif %}
+        <div class="post-content">
+          <p class="text-break">{{ post.content_html | safe }}</p>
+        </div>
+      </fieldset>
     </div>
-    {% endif %}
-    <div class="ml-4">
+    <div class="col-md-4">
+      {% if current_user.is_authenticated and current_user.can(Permission.COMMENT) %}
+        <div class="ml-4">
+          <button class="btn-sm btn btn-info" data-toggle="collapse" data-target="#collapseComment">Comentar este Post</button>
+          <div class="collapse" id="collapseComment">
+            <form class="my-1" action="{{ url_for('posts.comment', slug = post.slug)}}" method="POST">
+              {{ c_form.hidden_tag() }}
+              {% include "posts/_form_comment.html" %}
+            </form>
+          </div>
+        </div>
+      {% endif %}
+      <div class="vl"></div>
       {% include "posts/_comments.html" %}
     </div>
   </div>
-</div>
-{% if current_user == post.author %}
-<!-- Modal -->
-<div class="modal fade" id="postdelete" tabindex="-1" role="dialog" aria-labelledby="postdeleteLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4>Estas Seguro de quere eliminar tu Post - <span class="text-info">{{ post.title }}</span></h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-sm btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <form action="{{ url_for('posts.post_delete',slug = post.slug) }}" method="post">
-          {{ form.hidden_tag() }}
-          <input type="submit" class="btn-sm btn btn-danger" value="Si, Eliminar">
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Actualizar Post -->
-<div class="modal fade bd-example-modal-lg" id="updatePost" tabindex="-1" role="dialog"
-  aria-labelledby="updatePostLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Actualiza tu Post</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form method="POST" action="{{ url_for('posts.post_show', slug = post.slug) }}" enctype="multipart/form-data">
-          {{ form.hidden_tag() }}
-          {% include 'posts/_form_posts.html' %}
-          <div class="modal-footer">
-            {{ form.submit(class="btn btn-outline-success", value = "Actualizar") }}
+  {% if current_user == post.author %}
+    <!-- Modal -->
+    <div class="modal fade" id="postdelete" tabindex="-1" role="dialog" aria-labelledby="postdeleteLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>Estas Seguro de quere eliminar tu Post - <span class="text-info">{{ post.title }}</span></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-        </form>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <form action="{{ url_for('posts.post_delete',slug = post.slug) }}" method="post">
+              {{ form.hidden_tag() }}
+              <input type="submit" class="btn btn-danger" value="Si, Eliminar">
+            </form>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-{% endif %}
-{{ pagedown.include_pagedown() }}
+    <!-- Actualizar Post -->
+    <div class="modal fade bd-example-modal-lg" id="updatePost" tabindex="-1" role="dialog" aria-labelledby="updatePostLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Actualiza tu Post</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" action="{{ url_for('posts.post', slug = post.slug) }}"  enctype="multipart/form-data">
+              {{ form.hidden_tag() }}
+              {% include 'posts/_form_posts.html' %}
+              <div class="modal-footer">
+                {{ form.submit(class="btn btn-outline-success", value = "Actualizar") }}
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {{ pagedown.include_pagedown() }}
 {% endblock contenido %}

@@ -67,7 +67,7 @@ class Test(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///db/site-test.sqlite3'
 
 
-config: dict = {
+config = {
     'development': Development,
     'developmentmysql': DevelopmentMySQl,
     'production': Production,

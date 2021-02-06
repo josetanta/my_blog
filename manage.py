@@ -1,15 +1,15 @@
 import os
 from dotenv import load_dotenv
+
 from app.models import User, Post, Role, Follow, Comment
 from flask_migrate import MigrateCommand, upgrade
-from flask_script import Manager, Shell, Server
+from flask_script import Manager, Shell
 from app import create_app, db, migrate
-
 load_dotenv(verbose=True)
 
-app = create_app(os.getenv('FLASK_ENV') or 'default')
+app = create_app(os.getenv('FLASK_ENV'))
+print(os.getenv('FLASK_ENV'))
 manager = Manager(app)
-server = Server(port=os.getenv('FLASK_RUN_PORT'))
 
 
 def shell_context():
@@ -18,7 +18,6 @@ def shell_context():
 
 manager.add_command('shell', Shell(make_context=shell_context))
 manager.add_command('db', MigrateCommand)
-manager.add_command('runserver', server)
 
 
 @manager.command
@@ -37,12 +36,10 @@ def test_flask():
 
 @manager.command
 def seed():
+    from .app.seed import create_users
     """
-    Ejecuta el seed.py, creación de factories `create_user()`
-    """
-
-    from app.seed import create_users
-
+	Ejecuta el seed.py, creación de factories
+	"""
     create_users()
 
 
@@ -56,4 +53,5 @@ def deploy():
     Role.generate_roles()
 
 
-manager.run()
+if __name__ == '__main__':
+    manager.run()

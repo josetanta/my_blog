@@ -1,7 +1,7 @@
 .image-account {
-  max-width: auto;
-  max-height: auto;
-  margin-bottom: 2rem;
+  width: 150px;
+  height: 150px;
+  margin-bottom: 2em;
 }
 
 .title-account {
@@ -18,8 +18,8 @@
 }
 
 .account-img-profile {
-  max-height: 25px;
-  max-width: 25px;
+  height: 25px;
+  width: 25px;
   margin-right: 5px;
   box-sizing: border-box;
 }
@@ -27,21 +27,4 @@
 .meta-data {
   font-size: 12px;
   box-sizing: border-box;
-}
-
-.list-item {
-  list-style-type: none;
-  display: block;
-  padding: 0.3rem;
-  border-top: 1px solid #8c8080;
-}
-
-.list-item img {
-  max-width: 50px;
-  max-height: 50px;
-  display: inline-block;
-}
-
-.count-follow {
-  display: inline-block;
 }

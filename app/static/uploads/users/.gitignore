@@ -1,3 +1,5 @@
-*.jpg
-*.png
-*.ico
+.gitignore
+!.gitignore
+!*.jpg
+!*.png
+!*.ico

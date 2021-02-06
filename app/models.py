@@ -85,7 +85,7 @@ class User(UserMixin, db.Model):
     date_register = db.Column(
         db.DateTime, default=datetime.now, nullable=False)
     status = db.Column(db.Boolean, default=True, index=True)
-    upload = db.Column(db.String(200), nullable=True, default='def')
+    upload = db.Column(db.String(200), nullable=True, default='default.jpg')
     role_id = db.Column(db.Integer, db.ForeignKey(
         'roles.id'), index=True, nullable=False)
     confirmed = db.Column(db.Boolean, default=False)
@@ -118,7 +118,7 @@ class User(UserMixin, db.Model):
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
 
-    def get_reset_token(self, expires_sec=3600):
+    def get_reset_token(self, expires_sec=1800):
         s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
         token = s.dumps({'user_id': self.id}).decode('utf-8')
         return token
@@ -215,20 +215,6 @@ class User(UserMixin, db.Model):
     def password(self, password):
         self.password_hash = generate_password_hash(password)
 
-    @property
-    def followers_list(self):
-        return db.session.query(User)\
-            .select_from(Follow)\
-            .filter_by(followed_id=self.id)\
-            .join(User, Follow.follower_id == User.id).all()
-
-    @property
-    def followeds_list(self):
-        return db.session.query(User)\
-            .select_from(Follow)\
-            .filter_by(follower_id=self.id)\
-            .join(User, Follow.followed_id == User.id).all()
-
     def __repr__(self):
         return f"<User {self.email} {self.slug}>"
 
@@ -257,11 +243,9 @@ class Post(UserMixin, db.Model):
     content_html = db.Column(db.Text, nullable=False)
     slug = db.Column(db.String(100), nullable=False, unique=True, index=True)
     date_register = db.Column(
-        db.DateTime, default=datetime.utcnow, nullable=False)
-    publishied = db.Column(db.Boolean, default=True, index=True)
-    upload = db.Column(db.String(200), nullable=True, default='def')
-    url_image = db.Column(db.String(600), nullable=True, default='')
-
+        db.DateTime, default=datetime.now, nullable=False)
+    status = db.Column(db.Boolean, default=True, index=True)
+    upload = db.Column(db.String(200), nullable=True, default='default.jpg')
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
     comments = db.relationship(
         'Comment', backref='post', lazy=True, cascade="all, delete-orphan")
@@ -281,7 +265,7 @@ class Post(UserMixin, db.Model):
         ]
         target.content_html = bleach.linkify(
             bleach.clean(
-                markdown(value, output_format='html'),
+                markdown(value, output_format='web'),
                 tags=allowed_tags, strip=True
             )
         )
@@ -300,7 +284,7 @@ class Post(UserMixin, db.Model):
         obj = dict({
             'title': self.title,
             'content': self.content,
-            'publishied': self.publishied,
+            'status': self.status,
             'author': self.author.username,
             'comments': [comment.to_json() for comment in self.comments]
         })
@@ -309,7 +293,7 @@ class Post(UserMixin, db.Model):
     def get_id(self):
         obj = dict({
             'id': self.id,
-            'publishied': self.publishied,
+            'status': self.status,
         })
         return obj
 
@@ -324,7 +308,7 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), index=True)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), index=True)
     publishied = db.Column(db.Boolean, default=True)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=datetime.now)
 
     def to_json(self):
         return dict({
@@ -332,13 +316,6 @@ class Comment(db.Model):
             'body': self.body,
             'author': self.author.username
         })
-
-    def get_id(self):
-        obj = dict({
-            'id': self.id,
-            'publishied': self.publishied,
-        })
-        return obj
 
     def __repr__(self):
         return '<Comment %d %s>' % (self.id, self.publishied)

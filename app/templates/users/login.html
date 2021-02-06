@@ -2,28 +2,21 @@
 {% from "_form_field.html" import form_field %}
 
 {% block contenido %}
-<div class="row justify-content-center">
-  <div class="col-md-7">
-    <form method="POST" class="form-group">
-      {{ form.hidden_tag() }}
-      <fieldset class="form-group">
-        <legend class="border-bottom mb-4">{{ title }}</legend>
-        {{ form_field(form.email, class="form-control input-group" , placeholder = "Email") }}
-        {{ form_field(form.password, class="form-control input-group", placeholder="Contraseña") }}
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="form-group">
-            {{ form.submit(class="btn btn-outline-primary btn-block") }}
-          </div>
-          <div class="form-group">
-            {{ form.remember.label(class="form-check-label") }}
-            {{ form.remember(class="form-check-inline") }}
-          </div>
-        </div>
-      </fieldset>
-    </form>
-    <a class="text-info text-decoration-none" href="{{ url_for('users.register') }}">Registrarse</a>
-    <a class="text-secondary text-decoration-none" href="{{ url_for('users.send_token_reset_pass') }}">Olvide mi
-      contraseña</a>
-  </div>
-</div>
+<form method="POST" class="container-md m-5" data-remote="true">
+  {{ form.hidden_tag() }}
+  <fieldset class="form-group">
+    <legend class="border-bottom mb-4">{{ title }}</legend>
+    {{ form_field(form.email, class="form-control w-50" , placeholder = "Email") }}
+    {{ form_field(form.password, class="form-control w-50", placeholder="Contraseña") }}
+    <div class="form-group">
+      {{ form.remember.label(class="form-check-label") }}
+      {{ form.remember(class="form-check-inline") }}
+    </div>
+    <div class="form-group">
+      {{ form.submit(class="btn btn-outline-primary") }}
+      <a class="ml-4 text-info" href="{{ url_for('users.register') }}">Registrarse</a>
+    </div>
+
+  </fieldset>
+</form>
 {% endblock contenido %}

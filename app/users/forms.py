@@ -25,10 +25,10 @@ class RegisterForm(FlaskForm):
         if user:
             raise ValidationError('Este nombre de usuario ya existe.')
 
-    def validate_email(self, field):
-        email = User.query.filter_by(email=field.data).first()
-        if email:
-            raise ValidationError('Este email ya existe.')
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError('Este email es incorrecto.')
 
 
 class LoginForm(FlaskForm):
@@ -68,30 +68,3 @@ class AccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data.strip()).first()
             if user:
                 raise ValidationError('Este email es incorrecto.')
-
-
-class EmailResetPasswordForm(FlaskForm):
-    email = EmailField('Email', validators=[Email(),  DataRequired()])
-    submit = SubmitField('Enviar')
-
-    def validate_email(self, field):
-        email = User.query.filter_by(email=field.data).first()
-
-        if not email:
-            raise ValidationError(
-                'El correo ingresado no se encuentra registrado')
-
-
-class ResetPasswordForm(FlaskForm):
-    password = PasswordField('Contraseña', validators=[DataRequired(), Length(
-        min=6, max=30, message="Por favot revise lo errores"),  EqualTo('password_repeat', message="Las contraseñas deben de ser iguales")])
-    password_repeat = PasswordField('Confirme su Contraseña', validators=[DataRequired(), Length(
-        min=6, max=30, message="Por favot revise lo errores")])
-
-    submit = SubmitField('Reestablecer mi contraseña')
-
-    def validate_password(self, field):
-
-        if field.data != self.password_repeat.data:
-            raise ValidationError(
-                'Las contraseñas ingresadas no son iguales, intente nuevamente')

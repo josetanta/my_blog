@@ -9,9 +9,3 @@ __pycache__
 
 # Enviroments
 .env
-
-# Igonre Images
-*.png
-*.jpg
-
-.idea/

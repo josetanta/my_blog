@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block scripts %}
+	<script src="{{ url_for('static', filename='js/app/pages.js') }}" type="application/javascript"></script>
+	<script src="{{ url_for('static', filename='js/app/posts.js') }}" type="application/javascript"></script>
+{% endblock %}
+{% block contenido %}
+<nav aria-label="breadcrumb">
+	<ul class="breadcrumb" id="views">
+		<li class="breadcrumb-item"><a href="{{ url_for('admin.users') }}">Users</a></li>
+		<li class="breadcrumb-item"><a href="{{ url_for('admin.posts') }}">Posts</a></li>
+		<li class="breadcrumb-item"><a href="{{ url_for('admin.comments') }}">Comments</a></li>
+	</ul>
+</nav>
+<div class="container" id="content_index"></div>
+<!-- aria-current="page" -->
+{% endblock %}
